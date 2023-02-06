@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -29,9 +28,10 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .cors().disable()
-                .authorizeRequests()
-                .antMatchers("/devices").hasRole("ADMIN")
-                .antMatchers("/secured").authenticated()
+                .authorizeHttpRequests()
+                .antMatchers("/api/v1/devices").authenticated()
+                .antMatchers("/api/v1/vaporizers").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
