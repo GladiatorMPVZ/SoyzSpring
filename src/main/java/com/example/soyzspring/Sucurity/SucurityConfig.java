@@ -31,6 +31,7 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers("/api/v1/devices").authenticated()
                 .antMatchers("/api/v1/vaporizers").authenticated()
+                .antMatchers("/api/v1/boxes").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

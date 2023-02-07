@@ -4,6 +4,7 @@ package com.example.soyzspring.Service;
 import com.example.soyzspring.Repository.DevicesRepository;
 import com.example.soyzspring.entity.Devices;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
