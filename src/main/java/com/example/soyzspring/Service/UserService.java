@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
 
-    private Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService{
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
     }
 
-//    public void createUser(User user) {
-//        userRepository.save(user);
-//    }
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
 }
