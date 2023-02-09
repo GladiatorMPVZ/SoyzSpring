@@ -1,0 +1,11 @@
+.main-title {
+    color: red;
+    font-family: 'Press Start 2P', cursive;
+}
+.main-title span {
+    color: black;
+}
+.login-title {
+    color: black;
+    font-family: 'Press Start 2P', cursive;
+}

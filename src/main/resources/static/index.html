@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html np-app="soyz">
+
+<head>
+    <title> SOYZ searcher</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-route.min.js"></script>
+</head>
+
+<body>
+<div style="text-align:center;" class="container" ng-controller="indexController">
+    <h1 class="main-title">SOYZ <span>searcher</span></h1>
+    <br>
+    <form action="#">
+        <label for="username" class="login-title">Username:</label>
+        <input type="text" id="username" ng-model="user.username">
+        <br><br>
+        <label for="password" class="login-title">Password:</label>
+        <input type="password" id="password" name="password" ng-model="user.password">
+        <br><br>
+        <button type="submit" class="login-title">Sign in</button>
+    </form>
+    <script src="index.js"></script>
+    <script src="search/search.js"></script>
+</div>
+</body>
+</html>

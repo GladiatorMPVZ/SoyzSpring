@@ -1,6 +1,7 @@
 package com.example.soyzspring.Service;
 
 
+import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Repository.VaporizersRepository;
 import com.example.soyzspring.entity.Vaporizers;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,11 @@ public class VaporizersService {
 
     public Optional<Vaporizers> findById(Long id) {
         return vaporizersRepository.findById(id);
+    }
+
+    public void createNewVaporizer(VaporizerDto vaporizerDto) {
+        Vaporizers vaporizer = new Vaporizers();
+        vaporizer.setTitle(vaporizerDto.getTitle());
+        vaporizersRepository.save(vaporizer);
     }
 }

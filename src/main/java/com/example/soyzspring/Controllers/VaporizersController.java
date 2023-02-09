@@ -3,11 +3,11 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Converters.VaporizerConverter;
 import com.example.soyzspring.Dto.VaporizerDto;
-import com.example.soyzspring.Repository.VaporizersRepository;
+import com.example.soyzspring.Exceptions.ResourceNotFoundException;
+import com.example.soyzspring.Service.VaporizersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +16,30 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/vaporizers")
 public class VaporizersController {
-    private final VaporizersRepository vaporizersRepository;
+    private final VaporizersService vaporizersService;
     private final VaporizerConverter vaporizerConverter;
 
     @GetMapping
     public List<VaporizerDto> getAllVaporizers() {
-        return vaporizersRepository.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList());
+        return vaporizersService.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList());
     }
+
+    @GetMapping("/{id}")
+    public VaporizerDto getVaporizerById(@PathVariable Long id) {
+        return vaporizerConverter.entityToDto(vaporizersService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Испарителя с id: " + id + "не найден")));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createNewVaporizer(@RequestBody VaporizerDto vaporizerDto) {
+        vaporizersService.createNewVaporizer(vaporizerDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteVaporizerById(@PathVariable Long id) {
+        vaporizersService.deleteById(id);
+    }
+
+
 }

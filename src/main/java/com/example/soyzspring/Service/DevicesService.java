@@ -1,6 +1,7 @@
 package com.example.soyzspring.Service;
 
 
+import com.example.soyzspring.Dto.DeviceDto;
 import com.example.soyzspring.Repository.DevicesRepository;
 import com.example.soyzspring.entity.Devices;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,12 @@ public class DevicesService {
 
     public Optional<Devices> findById(Long id) {
         return devicesRepository.findById(id);
+    }
+
+    public void createNewDevice(DeviceDto deviceDto) {
+        Devices device = new Devices();
+        device.setTitle(deviceDto.getTitle());
+        devicesRepository.save(device);
     }
 
 }
