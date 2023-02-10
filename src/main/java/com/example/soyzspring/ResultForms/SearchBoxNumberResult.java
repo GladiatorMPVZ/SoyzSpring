@@ -1,11 +1,11 @@
-package com.example.soyzspring.Dto;
+package com.example.soyzspring.ResultForms;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Result {
+public class SearchBoxNumberResult {
 
     private Integer boxNumber;
     private String title;

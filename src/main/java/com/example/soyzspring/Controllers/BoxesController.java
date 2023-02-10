@@ -1,14 +1,14 @@
 package com.example.soyzspring.Controllers;
 
-import com.example.soyzspring.Dto.Result;
-import com.example.soyzspring.Dto.InputForResult;
+import com.example.soyzspring.ResultForms.SearchBoxNumberResult;
 import com.example.soyzspring.Service.BoxesService;
 import com.example.soyzspring.Service.UserService;
-import com.example.soyzspring.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,9 +21,9 @@ public class BoxesController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<Result>> getNumber(@RequestParam String deviceTitle, Principal principal) {
+    public ResponseEntity<List<SearchBoxNumberResult>> getNumber(@RequestParam String deviceTitle, Principal principal) {
         Long res = userService.findByUsername(principal.getName()).get().getId();
-        List<Result> resultList = boxesService.getBoxNumber(res.intValue(), deviceTitle);
+        List<SearchBoxNumberResult> resultList = boxesService.getBoxNumber(res.intValue(), deviceTitle);
         return ResponseEntity.ok(resultList);
     }
 }

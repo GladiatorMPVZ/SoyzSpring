@@ -2,6 +2,7 @@ package com.example.soyzspring.Service;
 
 
 import com.example.soyzspring.Dto.DeviceDto;
+import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Repository.DevicesRepository;
 import com.example.soyzspring.entity.Devices;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class DevicesService {
 
     private final DevicesRepository devicesRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     public List<Devices> findAll() {
         return devicesRepository.findAll();
@@ -33,6 +35,18 @@ public class DevicesService {
         Devices device = new Devices();
         device.setTitle(deviceDto.getTitle());
         devicesRepository.save(device);
+    }
+
+    public List<SearchDevVapResult> searchDeviceResults(String vaporizerTitle) {
+        return jdbcTemplate.query(
+                "SELECT devices.device_title FROM devices " +
+                        "INNER JOIN devices_vaporizers " +
+                        "ON devices.id = devices_vaporizers.device_id " +
+                        "INNER JOIN vaporizers " +
+                        "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
+                        "WHERE vaporizers.title = '" + vaporizerTitle + "'",
+                (rs, rowNum) -> new SearchDevVapResult(rs.getString("device_title"))
+        );
     }
 
 }

@@ -3,11 +3,12 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Converters.DeviceConverter;
 import com.example.soyzspring.Dto.DeviceDto;
-import com.example.soyzspring.Exceptions.AppError;
+import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.Service.DevicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,11 @@ public class DevicesController {
     private final DevicesService devicesService;
     private final DeviceConverter deviceConverter;
 
+    @GetMapping("/filtered")
+    public ResponseEntity<List<SearchDevVapResult>> getSuitableDevices(@RequestParam String vaporizerTitle) {
+        List<SearchDevVapResult> resultList = devicesService.searchDeviceResults(vaporizerTitle);
+        return ResponseEntity.ok(resultList);
+    }
 
     @GetMapping
     public List<DeviceDto> getAllDevices() {

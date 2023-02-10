@@ -2,11 +2,13 @@ package com.example.soyzspring.Controllers;
 
 
 import com.example.soyzspring.Converters.VaporizerConverter;
+import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.Service.VaporizersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,12 @@ import java.util.stream.Collectors;
 public class VaporizersController {
     private final VaporizersService vaporizersService;
     private final VaporizerConverter vaporizerConverter;
+
+    @GetMapping("/filtered")
+    public ResponseEntity<List<SearchDevVapResult>> getSuitableDevices(@RequestParam String deviceTitle) {
+        List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(deviceTitle);
+        return ResponseEntity.ok(resultList);
+    }
 
     @GetMapping
     public List<VaporizerDto> getAllVaporizers() {
