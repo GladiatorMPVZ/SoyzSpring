@@ -3,6 +3,7 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Converters.DeviceConverter;
 import com.example.soyzspring.Dto.DeviceDto;
+import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.Service.DevicesService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class DevicesController {
         return devicesService.findAll().stream().map(deviceConverter::entityToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/")
     public DeviceDto getDeviceById(@PathVariable Long id) {
         return deviceConverter.entityToDto(devicesService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Устройство с id: " + id + " не найдено")));
@@ -37,7 +38,7 @@ public class DevicesController {
         devicesService.createNewDevice(deviceDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/")
     public void deleteDeviceById(@PathVariable Long id) {
         devicesService.deleteById(id);
     }
