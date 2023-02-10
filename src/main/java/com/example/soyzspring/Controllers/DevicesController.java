@@ -21,6 +21,7 @@ public class DevicesController {
     private final DevicesService devicesService;
     private final DeviceConverter deviceConverter;
 
+
     @GetMapping
     public List<DeviceDto> getAllDevices() {
         return devicesService.findAll().stream().map(deviceConverter::entityToDto).collect(Collectors.toList());
