@@ -22,7 +22,7 @@ public class VaporizersController {
     private final VaporizerConverter vaporizerConverter;
 
     @GetMapping("/filtered")
-    public ResponseEntity<List<SearchDevVapResult>> getSuitableDevices(@RequestParam String deviceTitle) {
+    public ResponseEntity<List<SearchDevVapResult>> getSuitableVaporizers(@RequestParam String deviceTitle) {
         List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(deviceTitle);
         return ResponseEntity.ok(resultList);
     }
