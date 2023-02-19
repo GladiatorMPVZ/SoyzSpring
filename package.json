@@ -5,7 +5,7 @@
   "main": "src/client/main.tsx",
   "scripts": {
     "lint": "eslint src/client",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

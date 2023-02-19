@@ -1,6 +1,15 @@
 #app {
+  display: flex;
+  flex-direction: column;
   max-width: 128rem;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
 }

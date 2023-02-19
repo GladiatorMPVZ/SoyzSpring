@@ -1,0 +1,13 @@
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading__img {
+  width: 50%;
+  animation: spin infinite 1.5s linear;
+}
