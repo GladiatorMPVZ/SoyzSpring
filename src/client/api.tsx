@@ -51,6 +51,35 @@ const deleteDeviceById = (id) => {
   return fetchJSON('DELETE', url);
 };
 
+const getVaporizers = () => {
+  const url = 'api/v1/vaporizers';
+
+  return fetchJSON('GET', url);
+};
+
+const getVaporizerById = (id) => {
+  const url = `api/v1/vaporizers/${id}`;
+
+  return fetchJSON('GET', url);
+};
+
+const getVaporizerByDevice = (deviceTitle) => {
+  const url = `api/v1/vaporizers/filtered?deviceTitle=${deviceTitle}`;
+
+  return fetchJSON('GET', url);
+};
+
+const addVaporizer = (title) => {
+  const url = 'api/v1/vaporizers/';
+
+  return fetchJSON('POST', url, { title });
+};
+
+const deleteVaporizerById = (id) => {
+  const url = `api/v1/vaporizers/${id}`;
+
+  return fetchJSON('DELETE', url);
+};
 export default {
   register,
   authorize,
@@ -59,4 +88,9 @@ export default {
   getDeviceByVaporizer,
   addDevice,
   deleteDeviceById,
+  getVaporizers,
+  getVaporizerById,
+  getVaporizerByDevice,
+  addVaporizer,
+  deleteVaporizerById,
 };
