@@ -12,9 +12,9 @@ const SearchView = (props) => {
     </>
   );
 };
-const Search = () => {
-  const props = useSearch();
+const Search = (props) => {
+  const data = useSearch();
 
-  return <SearchView {...props} />;
+  return <SearchView {...props} {...data} />;
 };
 export default Search;

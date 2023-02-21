@@ -1,16 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import api from './api';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
 import Search from './components/Search/Search';
 import './App.scss';
 
 type AuthStatus = 'auth' | 'non_auth' | 'updating' | 'error';
+type Device = {
+  id: number;
+  title: string;
+};
+
 const useApp = () => {
   const [Auth, setAuth] = useState<AuthStatus>('updating');
-  return { Auth, setAuth };
+  const searchData = useRef({});
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      setAuth('non_auth');
+      return;
+    }
+    api
+      .getDevices()
+      .then((devices: Array<Device>) => {
+        if (!devices || !devices.length) {
+          setAuth('error');
+          console.error('No devices:', devices);
+        } else {
+          setAuth('auth');
+          searchData.current = { devices };
+        }
+      })
+      .catch((error) => {
+        setAuth('error');
+        console.error(error);
+      });
+  });
+
+  return { Auth, setAuth, searchData };
 };
-const AppView = (props: { Auth: AuthStatus }) => {
+const AppView = (props: ReturnType<typeof useApp>) => {
   return (
     <>
       <header className="header">
@@ -18,9 +50,9 @@ const AppView = (props: { Auth: AuthStatus }) => {
       </header>
       <main className="main">
         {props.Auth === 'auth' ? (
-          <Search />
+          <Search searchData={props.searchData} />
         ) : props.Auth === 'non_auth' ? (
-          <Authorization />
+          <Authorization setAuth={props.setAuth} />
         ) : props.Auth === 'updating' ? (
           <Loading />
         ) : (

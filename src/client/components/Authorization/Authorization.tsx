@@ -13,9 +13,9 @@ const AuthorizationView = (props) => {
     </>
   );
 };
-const Authorization = () => {
-  const props = useAuthorization();
+const Authorization = (props) => {
+  const data = useAuthorization();
 
-  return <AuthorizationView {...props} />;
+  return <AuthorizationView {...props} {...data} />;
 };
 export default Authorization;
