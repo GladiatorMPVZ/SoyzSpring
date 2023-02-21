@@ -1,11 +1,13 @@
 const fetchJSON = (method, url, data?) => {
+  const token = localStorage.getItem('token');
   const options = {
     method,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json;charset=UTF-8',
+      authorization: token ? `Bearer ${token}` : undefined,
     },
-    body: data ? JSON.stringify(data) : '',
+    body: data ? JSON.stringify(data) : undefined,
   };
   return fetch(url, options).then((res) => res.json());
 };
