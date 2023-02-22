@@ -13,6 +13,16 @@ export type AddEntityDTO = {
 
 type FetchData = AuthDTO | RegisterDTO | AddEntityDTO;
 
+type Device = {
+  id: number;
+  title: string;
+};
+
+const isDevise = (data: unknown): data is Device =>
+  typeof (data as Device)?.id === 'number' && typeof (data as Device)?.title === 'string';
+
+const isDevises = (data: unknown): data is Device[] => data instanceof Array && isDevise(data[0]);
+
 const fetchJSON = (method: string, url: string, data?: FetchData) => {
   const token = localStorage.getItem('token');
   const options = {
@@ -24,7 +34,7 @@ const fetchJSON = (method: string, url: string, data?: FetchData) => {
     },
     body: data && JSON.stringify(data),
   };
-  return fetch(url, options).then((res) => res.json());
+  return fetch(url, options).then((res) => res.json() as Promise<unknown>);
 };
 
 const register = (dto: RegisterDTO) => {
@@ -38,10 +48,13 @@ const authorize = (dto: AuthDTO) => {
   return fetchJSON('POST', url, dto);
 };
 
-const getDevices = () => {
+const getDevices = (isDevicesCallback: (devices: Device[]) => void, invalidDataCallback: (data: unknown) => void) => {
   const url = 'api/v1/devices';
 
-  return fetchJSON('GET', url);
+  return fetchJSON('GET', url).then((data) => {
+    if (isDevises(data)) isDevicesCallback(data);
+    else invalidDataCallback(data);
+  });
 };
 
 const getDeviceById = (id: number) => {

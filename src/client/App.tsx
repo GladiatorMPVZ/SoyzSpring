@@ -6,11 +6,7 @@ import Authorization from './components/Authorization/Authorization';
 import Search from './components/Search/Search';
 import './App.scss';
 
-type AuthStatus = 'auth' | 'non_auth' | 'updating' | 'error';
-type Device = {
-  id: number;
-  title: string;
-};
+export type AuthStatus = 'auth' | 'non_auth' | 'updating' | 'error';
 
 const useApp = () => {
   const [Auth, setAuth] = useState<AuthStatus>('updating');
@@ -23,21 +19,30 @@ const useApp = () => {
       setAuth('non_auth');
       return;
     }
+
+    let isIgnoreFetch = false;
     api
-      .getDevices()
-      .then((devices: Array<Device>) => {
-        if (!devices || !devices.length) {
-          setAuth('error');
-          console.error('No devices:', devices);
-        } else {
+      .getDevices(
+        (devices) => {
+          if (isIgnoreFetch) return;
           setAuth('auth');
           searchData.current = { devices };
-        }
-      })
+        },
+        (data) => {
+          if (isIgnoreFetch) return;
+          setAuth('error');
+          console.error('No devices, received data:', data);
+        },
+      )
       .catch((error) => {
+        if (isIgnoreFetch) return;
         setAuth('error');
         console.error(error);
       });
+
+    return () => {
+      isIgnoreFetch = true;
+    };
   });
 
   return { Auth, setAuth, searchData };
