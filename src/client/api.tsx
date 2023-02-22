@@ -1,26 +1,41 @@
-const fetchJSON = (method, url, data?) => {
+export type AuthDTO = {
+  username: string;
+  password: string;
+};
+
+export type RegisterDTO = AuthDTO & {
+  confirmPassword: string;
+};
+
+export type AddEntityDTO = {
+  title: string;
+};
+
+type FetchData = AuthDTO | RegisterDTO | AddEntityDTO;
+
+const fetchJSON = (method: string, url: string, data?: FetchData) => {
   const token = localStorage.getItem('token');
   const options = {
     method,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json;charset=UTF-8',
-      authorization: token ? `Bearer ${token}` : undefined,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
     },
-    body: data ? JSON.stringify(data) : undefined,
+    body: data && JSON.stringify(data),
   };
   return fetch(url, options).then((res) => res.json());
 };
 
-const register = (username, password, confirmPassword) => {
+const register = (dto: RegisterDTO) => {
   const url = 'api/v1/registration';
 
-  return fetchJSON('POST', url, { username, password, confirmPassword });
+  return fetchJSON('POST', url, dto);
 };
-const authorize = (username, password) => {
+const authorize = (dto: AuthDTO) => {
   const url = 'api/v1/auth';
 
-  return fetchJSON('POST', url, { username, password });
+  return fetchJSON('POST', url, dto);
 };
 
 const getDevices = () => {
@@ -29,25 +44,25 @@ const getDevices = () => {
   return fetchJSON('GET', url);
 };
 
-const getDeviceById = (id) => {
+const getDeviceById = (id: number) => {
   const url = `api/v1/devices/${id}`;
 
   return fetchJSON('GET', url);
 };
 
-const getDeviceByVaporizer = (vaporizerTitle) => {
+const getDeviceByVaporizerName = (vaporizerTitle: string) => {
   const url = `api/v1/devices/filtered?vaporizerTitle=${vaporizerTitle}`;
 
   return fetchJSON('GET', url);
 };
 
-const addDevice = (title) => {
+const addDevice = (dto: AddEntityDTO) => {
   const url = 'api/v1/devices/';
 
-  return fetchJSON('POST', url, { title });
+  return fetchJSON('POST', url, dto);
 };
 
-const deleteDeviceById = (id) => {
+const deleteDeviceById = (id: number) => {
   const url = `api/v1/devices/${id}`;
 
   return fetchJSON('DELETE', url);
@@ -59,25 +74,25 @@ const getVaporizers = () => {
   return fetchJSON('GET', url);
 };
 
-const getVaporizerById = (id) => {
+const getVaporizerById = (id: number) => {
   const url = `api/v1/vaporizers/${id}`;
 
   return fetchJSON('GET', url);
 };
 
-const getVaporizerByDevice = (deviceTitle) => {
+const getVaporizerByDeviceName = (deviceTitle: string) => {
   const url = `api/v1/vaporizers/filtered?deviceTitle=${deviceTitle}`;
 
   return fetchJSON('GET', url);
 };
 
-const addVaporizer = (title) => {
+const addVaporizer = (dto: AddEntityDTO) => {
   const url = 'api/v1/vaporizers/';
 
-  return fetchJSON('POST', url, { title });
+  return fetchJSON('POST', url, dto);
 };
 
-const deleteVaporizerById = (id) => {
+const deleteVaporizerById = (id: number) => {
   const url = `api/v1/vaporizers/${id}`;
 
   return fetchJSON('DELETE', url);
@@ -87,12 +102,12 @@ export default {
   authorize,
   getDevices,
   getDeviceById,
-  getDeviceByVaporizer,
+  getDeviceByVaporizerName,
   addDevice,
   deleteDeviceById,
   getVaporizers,
   getVaporizerById,
-  getVaporizerByDevice,
+  getVaporizerByDeviceName,
   addVaporizer,
   deleteVaporizerById,
 };
