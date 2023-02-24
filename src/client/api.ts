@@ -13,16 +13,6 @@ export type AddEntityDTO = {
 
 type FetchData = AuthDTO | RegisterDTO | AddEntityDTO;
 
-type Device = {
-  id: number;
-  title: string;
-};
-
-const isDevise = (data: unknown): data is Device =>
-  typeof (data as Device)?.id === 'number' && typeof (data as Device)?.title === 'string';
-
-const isDevises = (data: unknown): data is Device[] => data instanceof Array && isDevise(data[0]);
-
 const fetchJSON = (method: string, url: string, data?: FetchData) => {
   const token = localStorage.getItem('token');
   const options = {
@@ -48,13 +38,10 @@ const authorize = (dto: AuthDTO) => {
   return fetchJSON('POST', url, dto);
 };
 
-const getDevices = (isDevicesCallback: (devices: Device[]) => void, invalidDataCallback: (data: unknown) => void) => {
+const getDevices = () => {
   const url = 'api/v1/devices';
 
-  return fetchJSON('GET', url).then((data) => {
-    if (isDevises(data)) isDevicesCallback(data);
-    else invalidDataCallback(data);
-  });
+  return fetchJSON('GET', url);
 };
 
 const getDeviceById = (id: number) => {

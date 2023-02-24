@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import api from './api';
+import Device from './entities/Device';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
 import Search from './components/Search/Search';
@@ -22,18 +23,12 @@ const useApp = () => {
 
     let isIgnoreFetch = false;
     api
-      .getDevices(
-        (devices) => {
-          if (isIgnoreFetch) return;
-          setAuth('auth');
-          searchData.current = { devices };
-        },
-        (data) => {
-          if (isIgnoreFetch) return;
-          setAuth('error');
-          console.error('No devices, received data:', data);
-        },
-      )
+      .getDevices()
+      .then((data) => {
+        if (isIgnoreFetch) return;
+        searchData.current = { devices: Device.checkArray(data) };
+        setAuth('auth');
+      })
       .catch((error) => {
         if (isIgnoreFetch) return;
         setAuth('error');
@@ -67,10 +62,7 @@ const AppView = (props: ReturnType<typeof useApp>) => {
     </>
   );
 };
-const App = () => {
-  const data = useApp();
 
-  return <AppView {...data} />;
-};
-
-export default App;
+export default function App() {
+  return <AppView {...useApp()} />;
+}
