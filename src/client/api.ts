@@ -25,7 +25,7 @@ const fetchJSON = async (method: string, url: string, data?: FetchData) => {
     body: data && JSON.stringify(data),
   };
   const res = await fetch(url, options);
-  if (res.status >= 400) throw new Error(`Request error, status code: ${res.status}`);
+  if (res.status >= 400) throw { message: (await res.json().catch(() => ({})))?.message, code: res.status };
   return await (res.json().catch(() => ({})) as Promise<unknown>);
 };
 
