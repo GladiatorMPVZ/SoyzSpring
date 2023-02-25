@@ -13,7 +13,7 @@ export type AddEntityDTO = {
 
 type FetchData = AuthDTO | RegisterDTO | AddEntityDTO;
 
-const fetchJSON = (method: string, url: string, data?: FetchData) => {
+const fetchJSON = async (method: string, url: string, data?: FetchData) => {
   const token = localStorage.getItem('token');
   const options = {
     method,
@@ -24,7 +24,9 @@ const fetchJSON = (method: string, url: string, data?: FetchData) => {
     },
     body: data && JSON.stringify(data),
   };
-  return fetch(url, options).then((res) => res.json() as Promise<unknown>);
+  const res = await fetch(url, options);
+  if (res.status >= 400) throw new Error(`Request error, status code: ${res.status}`);
+  return await (res.json().catch(() => ({})) as Promise<unknown>);
 };
 
 const register = (dto: RegisterDTO) => {
