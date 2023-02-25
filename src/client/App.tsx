@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import api from './api';
 import Device from './entities/Device';
@@ -7,17 +7,18 @@ import Authorization from './components/Authorization/Authorization';
 import Search from './components/Search/Search';
 import './App.scss';
 
-export type AuthStatus = 'auth' | 'non_auth' | 'updating' | 'error';
+export type TAppState = 'auth' | 'non_auth' | 'updating' | 'error';
+export type TSetAppState = React.Dispatch<React.SetStateAction<TAppState>>;
 
 const useApp = () => {
-  const [Auth, setAuth] = useState<AuthStatus>('updating');
+  const [appState, setAppState] = useState<TAppState>('updating');
   const searchData = useRef({});
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      setAuth('non_auth');
+      setAppState('non_auth');
       return;
     }
 
@@ -27,11 +28,11 @@ const useApp = () => {
       .then((data) => {
         if (isIgnoreFetch) return;
         searchData.current = { devices: Device.checkArray(data) };
-        setAuth('auth');
+        setAppState('auth');
       })
       .catch((error) => {
         if (isIgnoreFetch) return;
-        setAuth('error');
+        setAppState('error');
         console.error(error);
       });
 
@@ -40,8 +41,9 @@ const useApp = () => {
     };
   });
 
-  return { Auth, setAuth, searchData };
+  return { appState, setAppState, searchData };
 };
+
 const AppView = (props: ReturnType<typeof useApp>) => {
   return (
     <>
@@ -49,11 +51,11 @@ const AppView = (props: ReturnType<typeof useApp>) => {
         <h1>SoyzVape девайсы</h1>
       </header>
       <main className="main">
-        {props.Auth === 'auth' ? (
+        {props.appState === 'auth' ? (
           <Search searchData={props.searchData} />
-        ) : props.Auth === 'non_auth' ? (
-          <Authorization setAuth={props.setAuth} />
-        ) : props.Auth === 'updating' ? (
+        ) : props.appState === 'non_auth' ? (
+          <Authorization setAppState={props.setAppState} />
+        ) : props.appState === 'updating' ? (
           <Loading />
         ) : (
           <p>Ups</p>
