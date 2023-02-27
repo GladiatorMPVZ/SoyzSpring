@@ -48,7 +48,7 @@ const AppView = (props: ReturnType<typeof useApp>) => {
   return (
     <>
       <header className="header">
-        <h1>SoyzVape девайсы</h1>
+        <h1 className="header__h1">SoyzVape девайсы</h1>
       </header>
       <main className="main">
         {props.appState === 'auth' ? (
@@ -58,7 +58,7 @@ const AppView = (props: ReturnType<typeof useApp>) => {
         ) : props.appState === 'updating' ? (
           <Loading />
         ) : (
-          <p>Ups</p>
+          <h2>Упс... что-то пошло не так...</h2>
         )}
       </main>
     </>
