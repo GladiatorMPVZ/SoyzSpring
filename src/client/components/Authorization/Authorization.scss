@@ -1,0 +1,83 @@
+.auth__form {
+  display: grid;
+  grid: 'buttons buttons' 'header header' 'err err' 3rem 'username username' 4rem 'password password' 4rem 'cpassword cpassword' 4rem 'action action' / 50% 50%;
+  gap: 1.5rem 0;
+  width: calc(20rem + 25%);
+  margin: auto;
+  padding-bottom: 2rem;
+  border: 0.2rem solid var(--color-main);
+  border-radius: 1rem;
+}
+
+.auth__h2 {
+  grid-area: header;
+  margin: 1rem;
+  font-size: 3em;
+  color: var(--color-main);
+}
+
+.auth__error {
+  grid-area: err;
+}
+
+.auth__username,
+.auth__password,
+.auth__confirm-password {
+  font-size: 2em;
+  margin: 0 1rem;
+  padding: 0 0.8rem;
+}
+
+.auth__username {
+  grid-area: username;
+  margin: 0 1rem;
+}
+
+.auth__password {
+  grid-area: password;
+}
+
+.auth__confirm-password {
+  grid-area: cpassword;
+}
+
+.auth__button {
+  &_set-signin {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &_set-signup {
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &_set-signin,
+  &_set-signup {
+    color: var(--color-font-light);
+    background: var(--color-main);
+    border: none;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  &_active {
+    color: var(--color-font-dark);
+    background: var(--color-bg-light);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-font-light);
+      background: var(--color-bg-dark);
+    }
+  }
+
+  &_action {
+    min-width: 20rem;
+    margin-top: 2rem;
+    grid-area: action;
+    justify-self: center;
+  }
+}

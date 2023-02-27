@@ -16,8 +16,9 @@
 
   --color-main: #543059;
   --color-alt: #755175;
+  --color-alt-dark: #432047;
   --color-font-light: #fafafade;
-  --color-font-dark: #213547;
+  --color-font-dark: #112537;
   --color-bg-light: #efefef;
   --color-bg-dark: #242424;
 }
@@ -39,7 +40,7 @@ body {
 button {
   border-radius: 0.7rem;
   border: 1px solid transparent;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   font-size: 1.6rem;
   font-weight: 500;
   font-family: inherit;
@@ -48,8 +49,10 @@ button {
   transition: background 0.2s;
 }
 
-button:hover {
-  background: var(--color-alt);
+@media (device-width: min(800px)) {
+  button:hover {
+    background: var(--color-alt);
+  }
 }
 
 button:focus,
