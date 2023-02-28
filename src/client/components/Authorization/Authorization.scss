@@ -2,8 +2,7 @@
   display: grid;
   grid: 'buttons buttons' 'header header' 'err err' 3rem 'username username' 4rem 'password password' 4rem 'cpassword cpassword' 4rem 'action action' / 50% 50%;
   gap: 1.5rem 0;
-  width: calc(20rem + 25%);
-  margin: auto;
+  width: calc(25rem + 10vw);
   padding-bottom: 2rem;
   border: 0.2rem solid var(--color-main);
   border-radius: 1rem;
