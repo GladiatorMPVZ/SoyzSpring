@@ -10,17 +10,12 @@ import './App.scss';
 export type TAppState = 'auth' | 'non_auth' | 'updating' | 'error';
 export type TSetAppState = React.Dispatch<React.SetStateAction<TAppState>>;
 
-const useApp = () => {
-  const [appState, setAppState] = useState<TAppState>('updating');
+const useApp = (initState: TAppState) => {
+  const [appState, setAppState] = useState<TAppState>(initState);
   const searchData = useRef({});
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      setAppState('non_auth');
-      return;
-    }
+    if (appState !== 'updating') return;
 
     let isIgnoreFetch = false;
     api
@@ -65,6 +60,6 @@ const AppView = (props: ReturnType<typeof useApp>) => {
   );
 };
 
-export default function App() {
-  return <AppView {...useApp()} />;
+export default function App(props: { initState: TAppState }) {
+  return <AppView {...useApp(props.initState)} />;
 }

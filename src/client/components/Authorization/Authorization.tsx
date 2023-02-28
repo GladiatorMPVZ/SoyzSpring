@@ -34,7 +34,7 @@ const useAuthorization = (props: { setAppState: TSetAppState }) => {
         const data = await api.authorize({ username, password });
         const token = checkToken(data).token;
         localStorage.setItem('token', token);
-        props.setAppState('auth');
+        props.setAppState('updating');
       } else {
         const confirmPassword = (confirmPasswordRef.current as unknown as HTMLInputElement).value;
         await api.register({ username, password, confirmPassword });
