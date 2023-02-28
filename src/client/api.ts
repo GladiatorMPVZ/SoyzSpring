@@ -34,6 +34,7 @@ const register = (dto: RegisterDTO) => {
 
   return fetchJSON('POST', url, dto);
 };
+
 const authorize = (dto: AuthDTO) => {
   const url = 'api/v1/auth';
 
@@ -99,6 +100,7 @@ const deleteVaporizerById = (id: number) => {
 
   return fetchJSON('DELETE', url);
 };
+
 export default {
   register,
   authorize,

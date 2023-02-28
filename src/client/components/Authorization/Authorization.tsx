@@ -25,6 +25,7 @@ const useAuthorization = (props: { setAppState: TSetAppState }) => {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const errorMessage = useRef('');
+
   const action = async () => {
     const username = (userNameRef.current as unknown as HTMLInputElement).value;
     const password = (passwordRef.current as unknown as HTMLInputElement).value;
