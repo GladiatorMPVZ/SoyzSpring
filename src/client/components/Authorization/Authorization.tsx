@@ -5,8 +5,6 @@ import api from '../../api';
 import { TSetAppState } from '../../App';
 import './Authorization.scss';
 
-type TAuth = 'idle' | 'error';
-
 type Token = {
   token: string;
 };
@@ -20,11 +18,11 @@ const checkToken = (data: unknown) => {
 
 const useAuthorization = (props: { setAppState: TSetAppState }) => {
   const [isSignIn, setSignIn] = useState(true);
-  const [auth, setAuth] = useState<TAuth>('idle');
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState('');
   const userNameRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
-  const errorMessage = useRef('');
 
   const action = async () => {
     const username = (userNameRef.current as unknown as HTMLInputElement).value;
@@ -39,18 +37,22 @@ const useAuthorization = (props: { setAppState: TSetAppState }) => {
       } else {
         const confirmPassword = (confirmPasswordRef.current as unknown as HTMLInputElement).value;
         await api.register({ username, password, confirmPassword });
+        setMessage('Успешная регистрация!');
       }
+      setIsError(false);
     } catch (error) {
       const err = error as { message: string; code: number };
+      console.error(error);
       if (err?.code === 400 || err?.code === 401) {
-        errorMessage.current = err?.message;
-        setAuth('error');
-        console.error(error);
+        setMessage(err?.message);
+        setIsError(true);
+      } else {
+        props.setAppState('error');
       }
     }
   };
 
-  return { isSignIn, setSignIn, userNameRef, passwordRef, confirmPasswordRef, action, auth, errorMessage };
+  return { isSignIn, setSignIn, userNameRef, passwordRef, confirmPasswordRef, action, isError, message };
 };
 
 const AuthorizationView = (props: ReturnType<typeof useAuthorization>) => {
@@ -71,7 +73,7 @@ const AuthorizationView = (props: ReturnType<typeof useAuthorization>) => {
         Регистрация
       </button>
       <h2 className="auth__h2">{props.isSignIn ? 'Вход' : 'Регистрация'}</h2>
-      {props.auth && <span className="auth__error">{props.errorMessage.current}</span>}
+      <span className={cn('auth__msg', { auth__msg_error: props.isError })}>{props.message}</span>
       <input className="auth__username" ref={props.userNameRef} type="text" placeholder="Логин" />
       <input className="auth__password" ref={props.passwordRef} type="text" placeholder="Пароль" />
       {!props.isSignIn && (

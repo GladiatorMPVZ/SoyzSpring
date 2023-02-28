@@ -11,18 +11,24 @@
 .auth__h2 {
   grid-area: header;
   margin: 1rem;
-  font-size: 3em;
+  font-size: 3rem;
   color: var(--color-main);
 }
 
-.auth__error {
+.auth__msg {
   grid-area: err;
+  font-size: 2rem;
+  color: green;
+
+  &_error {
+    color: crimson;
+  }
 }
 
 .auth__username,
 .auth__password,
 .auth__confirm-password {
-  font-size: 2em;
+  font-size: 2rem;
   margin: 0 1rem;
   padding: 0 0.8rem;
 }
