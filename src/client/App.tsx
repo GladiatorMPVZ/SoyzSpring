@@ -4,7 +4,7 @@ import api from './api';
 import Device from './entities/Device';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
-import Search from './components/Search/Search';
+import Search, { TSearchData } from './components/Search/Search';
 import './App.scss';
 
 export type TAppState = 'auth' | 'non_auth' | 'updating' | 'error';
@@ -12,7 +12,7 @@ export type TSetAppState = React.Dispatch<React.SetStateAction<TAppState>>;
 
 const useApp = (initState: TAppState) => {
   const [appState, setAppState] = useState<TAppState>(initState);
-  const searchData = useRef({});
+  const searchData = useRef({} as TSearchData);
 
   useEffect(() => {
     if (appState !== 'updating') return;
@@ -22,7 +22,7 @@ const useApp = (initState: TAppState) => {
       .getDevices()
       .then((data) => {
         if (isIgnoreFetch) return;
-        searchData.current = { devices: Device.checkArray(data) };
+        searchData.current = { devices: Device.checkArray(data), vaporizers: [] };
         setAppState('auth');
       })
       .catch((error) => {
@@ -36,7 +36,7 @@ const useApp = (initState: TAppState) => {
     };
   });
 
-  return { appState, setAppState, searchData };
+  return { appState, setAppState, searchData: searchData.current };
 };
 
 const AppView = (props: ReturnType<typeof useApp>) => {
