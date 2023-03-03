@@ -27,7 +27,7 @@ const findBestMatches = (sample: string, searchData: TSearchData, size = 3) => {
     if (index !== -1) bestMatches.splice(index, 1, { id, title, rating, type: 'vaporizer' });
   }
 
-  return bestMatches;
+  return bestMatches.filter((c) => c.rating !== 0);
 };
 
 export default {

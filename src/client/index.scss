@@ -12,7 +12,7 @@
   text-size-adjust: 100%;
 
   --color-main: #543059;
-  --color-alt: #755175;
+  --color-alt: #966396;
   --color-alt-dark: #432047;
   --color-font-light: #fafafade;
   --color-font-dark: #112537;
@@ -47,7 +47,7 @@ button {
   transition: background 0.2s;
 }
 
-@media (device-width: min(800px)) {
+@media (min-width: 800px) {
   button:hover {
     background: var(--color-alt);
   }

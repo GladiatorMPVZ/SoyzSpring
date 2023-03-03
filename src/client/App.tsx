@@ -47,7 +47,7 @@ const AppView = (props: ReturnType<typeof useApp>) => {
       </header>
       <main className="main">
         {props.appState === 'auth' ? (
-          <Search searchData={props.searchData} />
+          <Search searchData={props.searchData} setAppState={props.setAppState} />
         ) : props.appState === 'non_auth' ? (
           <Authorization setAppState={props.setAppState} />
         ) : props.appState === 'updating' ? (
