@@ -3,6 +3,7 @@ package com.example.soyzspring.Sucurity;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -40,6 +44,19 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return bean;
     }
 
     @Bean
