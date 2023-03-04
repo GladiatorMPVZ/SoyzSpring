@@ -32,7 +32,7 @@ public class VaporizersController {
         return vaporizersService.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public VaporizerDto getVaporizerById(@PathVariable Long id) {
         return vaporizerConverter.entityToDto(vaporizersService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Испарителя с id: " + id + "не найден")));
@@ -44,7 +44,7 @@ public class VaporizersController {
         vaporizersService.createNewVaporizer(vaporizerDto);
     }
 
-    @DeleteMapping("/{id}/")
+    @DeleteMapping("/{id}")
     public void deleteVaporizerById(@PathVariable Long id) {
         vaporizersService.deleteById(id);
     }
