@@ -13,6 +13,8 @@ export type AddEntityDTO = {
 
 type FetchData = AuthDTO | RegisterDTO | AddEntityDTO;
 
+const baseUrl = 'http://192.168.1.104:8100/soyz-shop/api/v1/';
+
 const fetchJSON = async (method: string, url: string, data?: FetchData) => {
   const token = localStorage.getItem('token');
   const options = {
@@ -30,73 +32,73 @@ const fetchJSON = async (method: string, url: string, data?: FetchData) => {
 };
 
 const register = (dto: RegisterDTO) => {
-  const url = 'api/v1/registration';
+  const url = baseUrl + 'registration';
 
   return fetchJSON('POST', url, dto);
 };
 
 const authorize = (dto: AuthDTO) => {
-  const url = 'api/v1/auth';
+  const url = baseUrl + 'auth';
 
   return fetchJSON('POST', url, dto);
 };
 
 const getDevices = () => {
-  const url = 'api/v1/devices';
+  const url = baseUrl + 'devices';
 
   return fetchJSON('GET', url);
 };
 
 const getDeviceById = (id: number) => {
-  const url = `api/v1/devices/${id}`;
+  const url = baseUrl + `devices/${id}`;
 
   return fetchJSON('GET', url);
 };
 
 const getDevicesByVaporizerName = (vaporizerTitle: string) => {
-  const url = `api/v1/devices/filtered?vaporizerTitle=${vaporizerTitle}`;
+  const url = baseUrl + `devices/filtered?vaporizerTitle=${vaporizerTitle}`;
 
   return fetchJSON('GET', url);
 };
 
 const addDevice = (dto: AddEntityDTO) => {
-  const url = 'api/v1/devices/';
+  const url = baseUrl + 'devices';
 
   return fetchJSON('POST', url, dto);
 };
 
 const deleteDeviceById = (id: number) => {
-  const url = `api/v1/devices/${id}`;
+  const url = baseUrl + `devices/${id}`;
 
   return fetchJSON('DELETE', url);
 };
 
 const getVaporizers = () => {
-  const url = 'api/v1/vaporizers';
+  const url = baseUrl + 'vaporizers';
 
   return fetchJSON('GET', url);
 };
 
 const getVaporizerById = (id: number) => {
-  const url = `api/v1/vaporizers/${id}`;
+  const url = baseUrl + `vaporizers/${id}`;
 
   return fetchJSON('GET', url);
 };
 
 const getVaporizersByDeviceName = (deviceTitle: string) => {
-  const url = `api/v1/vaporizers/filtered?deviceTitle=${deviceTitle}`;
+  const url = baseUrl + `vaporizers/filtered?deviceTitle=${deviceTitle}`;
 
   return fetchJSON('GET', url);
 };
 
 const addVaporizer = (dto: AddEntityDTO) => {
-  const url = 'api/v1/vaporizers/';
+  const url = baseUrl + 'vaporizers';
 
   return fetchJSON('POST', url, dto);
 };
 
 const deleteVaporizerById = (id: number) => {
-  const url = `api/v1/vaporizers/${id}`;
+  const url = baseUrl + `vaporizers/${id}`;
 
   return fetchJSON('DELETE', url);
 };
