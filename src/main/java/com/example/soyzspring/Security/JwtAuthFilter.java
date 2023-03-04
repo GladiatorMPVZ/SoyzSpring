@@ -1,4 +1,4 @@
-package com.example.soyzspring.Sucurity;
+package com.example.soyzspring.Security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
