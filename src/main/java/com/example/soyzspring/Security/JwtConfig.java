@@ -1,4 +1,4 @@
-package com.example.soyzspring.Sucurity;
+package com.example.soyzspring.Security;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

@@ -33,7 +33,7 @@ public class DevicesController {
         return devicesService.findAll().stream().map(deviceConverter::entityToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public DeviceDto getDeviceById(@PathVariable Long id) {
         return deviceConverter.entityToDto(devicesService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Устройство с id: " + id + " не найдено")));
@@ -45,7 +45,7 @@ public class DevicesController {
         devicesService.createNewDevice(deviceDto);
     }
 
-    @DeleteMapping("/{id}/")
+    @DeleteMapping("/{id}")
     public void deleteDeviceById(@PathVariable Long id) {
         devicesService.deleteById(id);
     }

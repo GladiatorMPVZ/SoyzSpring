@@ -1,4 +1,4 @@
-package com.example.soyzspring.Sucurity;
+package com.example.soyzspring.Security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

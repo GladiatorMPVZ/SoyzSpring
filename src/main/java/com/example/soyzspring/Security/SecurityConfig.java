@@ -1,4 +1,4 @@
-package com.example.soyzspring.Sucurity;
+package com.example.soyzspring.Security;
 
 
 import lombok.RequiredArgsConstructor;
@@ -14,12 +14,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 @Slf4j
-public class SucurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final JwtAuthFilter jwtAuthFilter;
 
@@ -27,10 +29,7 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().disable()
                 .authorizeHttpRequests()
-//                .antMatchers("/api/v1/devices").authenticated()
-//                .antMatchers("/api/v1/vaporizers").authenticated()
                 .antMatchers("/api/v1/auth").permitAll()
                 .antMatchers("/api/v1/registration").permitAll()
                 .anyRequest().authenticated()
@@ -42,6 +41,13 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("*");
     }
 
     @Bean

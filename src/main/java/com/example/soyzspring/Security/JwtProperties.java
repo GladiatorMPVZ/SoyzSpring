@@ -1,4 +1,4 @@
-package com.example.soyzspring.Sucurity;
+package com.example.soyzspring.Security;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
