@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import api from '../../api';
@@ -13,16 +13,9 @@ export type TSearchData = {
   vaporizers: Vaporizer[];
 };
 
-const isStringArray = (data: unknown): data is string[] => data instanceof Array && typeof data[0] === 'string';
-
-const validateSearchResult = (data: unknown) => {
-  if (!isStringArray(data)) throw new Error(`Invalid received data: ${data})`);
-  return data;
-};
-
 const useSearch = (props: Parameters<typeof Search>[0]) => {
   const [searchInput, setSearchInput] = useState('');
-  const [searchResult, setSearchResult] = useState([] as string[]);
+  const [searchResult, setSearchResult] = useState([] as Device[]);
   const [bestMatches, setBestMatches] = useState([] as TBestMatches[]);
   const [isShowOptions, setShowOptions] = useState(false);
   const optionsRef = useRef({} as HTMLUListElement);
@@ -35,7 +28,7 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
     setShowOptions(!!bestMatches.length);
   };
 
-  const search = async (event: MouseEvent) => {
+  const search = useCallback(async (event: MouseEvent) => {
     const option = (event.target as HTMLElement).closest('.search__option') as HTMLElement;
     const type = option.dataset.type;
     const title = option.dataset.title as string;
@@ -47,17 +40,15 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
 
       setSearchInput(title);
       setShowOptions(false);
-      setSearchResult(validateSearchResult(data));
+      setSearchResult(Device.checkArray(data, false));
     } catch (error) {
       console.error(error);
       props.setAppState('error');
     }
-  };
+  }, []);
 
   useEffect(() => {
-    const listener = (event: MouseEvent) => search(event);
-    optionsRef.current.addEventListener('click', listener);
-    return () => optionsRef.current.removeEventListener('click', listener);
+    optionsRef.current.addEventListener('click', search);
   });
 
   return { searchInput, updateOptions, bestMatches, optionsRef, isShowOptions, searchResult };
@@ -90,7 +81,7 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
       <ul className="search__results">
         {props.searchResult.map((c, i) => (
           <li className="search__result" key={i}>
-            {c}
+            {c.deviceTitle}
           </li>
         ))}
       </ul>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import api from './api';
 import Device from './entities/Device';
+import Vaporizer from './entities/Vaporizer';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
 import Search, { TSearchData } from './components/Search/Search';
@@ -18,19 +19,22 @@ const useApp = (initState: TAppState) => {
     if (appState !== 'updating') return;
 
     let isIgnoreFetch = false;
-    api
-      .getDevices()
-      .then((data) => {
+    (async function () {
+      try {
+        const dataDevices = api.getDevices();
+        const dataVaporizers = api.getVaporizers();
         if (isIgnoreFetch) return;
-        searchData.current = { devices: Device.checkArray(data), vaporizers: [] };
+        searchData.current = {
+          devices: Device.checkArray(await dataDevices),
+          vaporizers: Vaporizer.checkArray(await dataVaporizers),
+        };
         setAppState('auth');
-      })
-      .catch((error) => {
+      } catch (error) {
         if (isIgnoreFetch) return;
         setAppState('error');
         console.error(error);
-      });
-
+      }
+    })();
     return () => {
       isIgnoreFetch = true;
     };
