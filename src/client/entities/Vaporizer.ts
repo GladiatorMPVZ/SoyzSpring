@@ -4,10 +4,10 @@ const isVaporizer = (data: unknown, withId = true): data is Vaporizer =>
     : typeof (data as Vaporizer)?.deviceTitle === 'string';
 
 const isVaporizerArray = (data: unknown, withId = true): data is Vaporizer[] =>
-  data instanceof Array && isVaporizer(data[0]);
+  data instanceof Array && isVaporizer(data[0], withId);
 
 export default class Vaporizer {
-  constructor(public id: number, public title?: string, public deviceTitle?: string) {
+  constructor(public id: number, public title: string, public deviceTitle?: string) {
     this.id = id;
     this.title = title;
   }

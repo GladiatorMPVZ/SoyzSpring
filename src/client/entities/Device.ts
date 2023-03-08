@@ -7,7 +7,7 @@ const isDeviceArray = (data: unknown, withId = true): data is Device[] =>
   data instanceof Array && isDevice(data[0], withId);
 
 export default class Device {
-  constructor(public id: number, public title?: string, public deviceTitle?: string) {
+  constructor(public id: number, public title: string, public deviceTitle?: string) {
     this.id = id;
     this.title = title;
   }

@@ -72,7 +72,7 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
                 <li className="search__option" key={i} data-type={`${c.type}`} data-title={`${c.title}`}>
                   <span>{c.title}</span>
                   <span>{`${(c.rating * 100).toFixed(2)}%`}</span>
-                  <span>{c.type === 'device' ? 'Девайс' : 'Испаритель'}</span>
+                  <span>{c.type === 'devices' ? 'Девайс' : 'Испаритель'}</span>
                 </li>
               ),
           )}
