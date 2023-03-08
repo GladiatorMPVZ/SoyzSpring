@@ -22,9 +22,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "adress")
-    private String adress;
-
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

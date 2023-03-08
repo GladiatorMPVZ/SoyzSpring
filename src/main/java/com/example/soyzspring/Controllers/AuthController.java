@@ -2,10 +2,12 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Dto.RegisterUserDto;
 import com.example.soyzspring.Exceptions.AppError;
-import com.example.soyzspring.Service.UserService;
 import com.example.soyzspring.Security.JwtRequest;
 import com.example.soyzspring.Security.JwtResponse;
 import com.example.soyzspring.Security.JwtTokenUtil;
+import com.example.soyzspring.Service.RoleService;
+import com.example.soyzspring.Service.UserService;
+import com.example.soyzspring.entity.Role;
 import com.example.soyzspring.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,12 +33,7 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-
-
-//    @ModelAttribute
-//    public void setResponseHeader(HttpServletResponse response) {
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//    }
+    private final RoleService roleService;
 
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
@@ -57,6 +58,9 @@ public class AuthController {
         User user = new User();
         user.setUsername(registerUserDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.getRole(1L));
+        user.setRoles(roles);
         userService.createUser(user);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
