@@ -39,13 +39,13 @@ public class DevicesService {
 
     public List<SearchDevVapResult> searchDeviceResults(String vaporizerTitle) {
         return jdbcTemplate.query(
-                "SELECT devices.device_title FROM devices " +
+                "SELECT devices.id, devices.device_title FROM devices " +
                         "INNER JOIN devices_vaporizers " +
                         "ON devices.id = devices_vaporizers.device_id " +
                         "INNER JOIN vaporizers " +
                         "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
                         "WHERE vaporizers.title = '" + vaporizerTitle + "'",
-                (rs, rowNum) -> new SearchDevVapResult(rs.getString("device_title"))
+                (rs, rowNum) -> new SearchDevVapResult(rs.getLong("id"), rs.getString("device_title"))
         );
     }
 
