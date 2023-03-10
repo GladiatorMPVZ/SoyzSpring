@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface DevicesVaporizersRepository extends JpaRepository<DevicesVaporizers, Long> {
 
-//    Optional<DevicesVaporizers> findByDevicesIdAndVaporizersIdForDV(Devices devicesId, Vaporizers vaporizersIdForDV);
+    Optional<DevicesVaporizers> findByDevicesIdAndVaporizersIdForDV(Devices devicesId, Vaporizers vaporizersIdForDV);
 
 }

@@ -25,11 +25,11 @@ public class DevicesVaporizersService {
         devicesVaporizersRepository.save(dv);
     }
 
-//    public boolean isExists(Long deviceId, Long vaporizerId) {
-//        Devices devices = new Devices();
-//        Vaporizers vaporizers = new Vaporizers();
-//        devices.setId(deviceId);
-//        vaporizers.setId(vaporizerId);
-//        return devicesVaporizersRepository.findByDevicesIdAndVaporizersIdForDV(devices, vaporizers).isPresent();
-//    }
+    public boolean isExists(Long deviceId, Long vaporizerId) {
+        Devices devices = new Devices();
+        Vaporizers vaporizers = new Vaporizers();
+        devices.setId(deviceId);
+        vaporizers.setId(vaporizerId);
+        return devicesVaporizersRepository.findByDevicesIdAndVaporizersIdForDV(devices, vaporizers).isPresent();
+    }
 }

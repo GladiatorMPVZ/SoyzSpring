@@ -24,10 +24,9 @@ public class DvController {
         if (dvDto.getDeviceId() < 0 || dvDto.getVaporizerId() < 0) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "id устройства или испарителя не могут быть отрицательными"), HttpStatus.BAD_REQUEST);
         }
-        //TODO Сделать проверку на существование связи
-//        if (dvService.isExists(dvDto.getDeviceId(), dvDto.getVaporizerId())) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Связь уже существует"), HttpStatus.BAD_REQUEST);
-//        }
+        if (dvService.isExists(dvDto.getDeviceId(), dvDto.getVaporizerId())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Связь уже существует"), HttpStatus.BAD_REQUEST);
+        }
         dvService.addNewParallel(dvDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
