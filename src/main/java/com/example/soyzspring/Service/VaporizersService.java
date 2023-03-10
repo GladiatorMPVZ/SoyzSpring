@@ -37,15 +37,7 @@ public class VaporizersService {
         vaporizersRepository.save(vaporizer);
     }
 
-    public List<SearchDevVapResult> searchDeviceResults(String title) {
-        return jdbcTemplate.query(
-                "SELECT vaporizers.id, vaporizers.title FROM vaporizers " +
-                        "INNER JOIN devices_vaporizers " +
-                        "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
-                        "INNER JOIN devices " +
-                        "ON devices.id = devices_vaporizers.device_id " +
-                        "WHERE devices.device_title = '" + title + "'",
-                (rs, rowNum) -> new SearchDevVapResult(rs.getLong("id"), rs.getString("title"))
-        );
+    public List<SearchDevVapResult> searchDeviceResults(String deviceTitle) {
+        return vaporizersRepository.findByDeviceTitle(deviceTitle);
     }
 }

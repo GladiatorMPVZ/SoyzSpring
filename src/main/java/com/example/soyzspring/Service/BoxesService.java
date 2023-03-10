@@ -20,18 +20,8 @@ public class BoxesService {
         return boxesRepository.findAll();
     }
 
-    public List<SearchBoxNumberResult> getBoxNumber(Integer boxNumber, String title) {
-        return jdbcTemplate.query(
-                "SELECT boxes.box_number, vaporizers.title FROM boxes " +
-                        "INNER JOIN vaporizers " +
-                        "ON vaporizers.id = boxes.vapor_id " +
-                        "INNER JOIN devices_vaporizers " +
-                        "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
-                        "INNER JOIN devices " +
-                        "ON devices.id = devices_vaporizers.device_id " +
-                        "WHERE devices.device_title = '" + title + "' AND boxes.shop_id =" + boxNumber,
-                (rs, rowNum) -> new SearchBoxNumberResult(rs.getInt("box_number"), rs.getString("title"))
-        );
+    public List<SearchBoxNumberResult> getBoxNumber(String title, Long userId) {
+        return boxesRepository.findbyDeviceTitleAndShopId(title, userId);
     }
 
 

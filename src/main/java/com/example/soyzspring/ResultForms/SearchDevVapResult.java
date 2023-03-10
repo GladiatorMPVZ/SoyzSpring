@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class SearchDevVapResult {
     private Long id;
-    private String deviceTitle;
+    private String title;
 }

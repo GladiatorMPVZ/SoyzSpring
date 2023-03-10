@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
                 .antMatchers("/api/v1/auth").permitAll()
-                .antMatchers("/api/v1/registration").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/v1/registration").permitAll()/*hasAnyAuthority("ADMIN")*/
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
