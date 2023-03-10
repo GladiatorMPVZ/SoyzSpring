@@ -2,6 +2,7 @@ package com.example.soyzspring.Controllers;
 
 
 import com.example.soyzspring.Converters.VaporizerConverter;
+import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
@@ -39,9 +40,15 @@ public class VaporizersController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createNewVaporizer(@RequestBody VaporizerDto vaporizerDto) {
+    public ResponseEntity<?> createNewVaporizer(@RequestBody VaporizerDto vaporizerDto) {
+        if (vaporizerDto.getTitle().length() == 0) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Название испарителя не может быть пустым полем"), HttpStatus.BAD_REQUEST);
+        }
+        if (vaporizersService.isExists(vaporizerDto.getTitle())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такой испаритель уже существует"), HttpStatus.BAD_REQUEST);
+        }
         vaporizersService.createNewVaporizer(vaporizerDto);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

@@ -3,6 +3,7 @@ package com.example.soyzspring.Repository;
 
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.entity.Devices;
+import com.example.soyzspring.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,6 @@ public interface DevicesRepository extends JpaRepository<Devices, Long> {
             "INNER JOIN Vaporizers v ON v.id = dv.vaporizersIdForDV.id " +
             "WHERE v.title = :vaporizerTitle")
     List<SearchDevVapResult> findByVaporizerTitle(@Param("vaporizerTitle") String vaporizerTitle);
+
+    Optional<Devices> findByTitle(String title);
 }

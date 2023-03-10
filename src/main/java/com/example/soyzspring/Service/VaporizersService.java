@@ -39,4 +39,8 @@ public class VaporizersService {
     public List<SearchDevVapResult> searchDeviceResults(String deviceTitle) {
         return vaporizersRepository.findByDeviceTitle(deviceTitle);
     }
+
+    public boolean isExists(String deviceTitle) {
+        return vaporizersRepository.findByTitle(deviceTitle).isPresent();
+    }
 }

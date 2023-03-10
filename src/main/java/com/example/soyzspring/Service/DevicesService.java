@@ -40,4 +40,8 @@ public class DevicesService {
         return devicesRepository.findByVaporizerTitle(vaporizerTitle);
     }
 
+    public boolean isExists(String deviceTitle) {
+        return devicesRepository.findByTitle(deviceTitle).isPresent();
+    }
+
 }
