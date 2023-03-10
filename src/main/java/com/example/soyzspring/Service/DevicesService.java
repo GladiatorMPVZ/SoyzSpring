@@ -17,7 +17,6 @@ import java.util.Optional;
 public class DevicesService {
 
     private final DevicesRepository devicesRepository;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<Devices> findAll() {
         return devicesRepository.findAll();

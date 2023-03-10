@@ -30,5 +30,4 @@ public class User {
 
     @OneToMany(mappedBy = "userId")
     private List<Boxes> boxesList;
-
 }

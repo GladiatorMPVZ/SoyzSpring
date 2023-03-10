@@ -17,7 +17,6 @@ import java.util.Optional;
 public class VaporizersService {
 
     private final VaporizersRepository vaporizersRepository;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<Vaporizers> findAll() {
         return vaporizersRepository.findAll();
