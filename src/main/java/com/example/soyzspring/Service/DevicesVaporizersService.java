@@ -10,6 +10,9 @@ import com.example.soyzspring.entity.Vaporizers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DevicesVaporizersService {
@@ -31,5 +34,17 @@ public class DevicesVaporizersService {
         devices.setId(deviceId);
         vaporizers.setId(vaporizerId);
         return devicesVaporizersRepository.findByDevicesIdAndVaporizersIdForDV(devices, vaporizers).isPresent();
+    }
+    @Transactional
+    public void  deleteParallel(Long deviceId, Long vaporizerId) {
+        Devices devices = new Devices();
+        Vaporizers vaporizers = new Vaporizers();
+        devices.setId(deviceId);
+        vaporizers.setId(vaporizerId);
+        devicesVaporizersRepository.deleteByDevicesIdAndVaporizersIdForDV(devices, vaporizers);
+    }
+
+    public List<DevicesVaporizers> getAll() {
+        return devicesVaporizersRepository.findAll();
     }
 }

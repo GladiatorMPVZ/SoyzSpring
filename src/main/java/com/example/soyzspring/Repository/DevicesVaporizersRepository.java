@@ -11,4 +11,6 @@ public interface DevicesVaporizersRepository extends JpaRepository<DevicesVapori
 
     Optional<DevicesVaporizers> findByDevicesIdAndVaporizersIdForDV(Devices devicesId, Vaporizers vaporizersIdForDV);
 
+    Optional<DevicesVaporizers> deleteByDevicesIdAndVaporizersIdForDV(Devices devicesId, Vaporizers vaporizersIdForDV);
+
 }
