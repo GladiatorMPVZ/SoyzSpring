@@ -8,15 +8,19 @@ import Authorization from './components/Authorization/Authorization';
 import Search, { TSearchData } from './components/Search/Search';
 import './App.scss';
 
-export type TAppState = 'auth' | 'non_auth' | 'updating' | 'error';
+export type TAppState = 'auth' | 'non_auth' | 'error';
 export type TSetAppState = React.Dispatch<React.SetStateAction<TAppState>>;
+export type TRole = 'Admin' | 'User' | 'Guest';
+export type TPage = 'Auth' | 'Search' | 'Loading' | 'Error';
 
-const useApp = (initState: TAppState) => {
-  const [appState, setAppState] = useState<TAppState>(initState);
+const useApp = (props: Parameters<typeof App>[0]) => {
+  const [page, setPage] = useState<TPage>(props.initPage);
+  const [appState, setAppState] = useState<TAppState>(props.initState);
+  const [userRole, setUserRole] = useState<TRole>(props.userRole);
   const searchData = useRef({} as TSearchData);
 
   useEffect(() => {
-    if (appState !== 'updating') return;
+    if (page !== 'Loading') return;
 
     let isIgnoreFetch = false;
     (async function () {
@@ -28,7 +32,7 @@ const useApp = (initState: TAppState) => {
           devices: Device.checkArray(await dataDevices),
           vaporizers: Vaporizer.checkArray(await dataVaporizers),
         };
-        setAppState('auth');
+        setPage('Search');
       } catch (error) {
         if (isIgnoreFetch) return;
         setAppState('error');
@@ -40,21 +44,68 @@ const useApp = (initState: TAppState) => {
     };
   });
 
-  return { appState, setAppState, searchData: searchData.current };
+  const logOut = () => {
+    localStorage.removeItem('token');
+    setAppState('non_auth');
+    setPage('Auth');
+    setUserRole('Guest');
+  };
+
+  const toAuth = () => {
+    setPage('Auth');
+  };
+
+  const toApp = () => {
+    setPage('Search');
+  };
+
+  return {
+    appState,
+    setAppState,
+    searchData: searchData.current,
+    logOut,
+    userRole,
+    setUserRole,
+    toAuth,
+    toApp,
+    page,
+    setPage,
+  };
 };
 
 const AppView = (props: ReturnType<typeof useApp>) => {
   return (
     <>
       <header className="header">
-        <h1 className="header__h1">SoyzVape девайсы</h1>
+        <h1 className="header__h1">SoyzVape</h1>
+        {props.userRole === 'Admin' && props.page !== 'Auth' && (
+          <button className="header__button-auth" type="button" onClick={props.toAuth}>
+            Регистрация
+          </button>
+        )}
+        {props.userRole === 'Admin' && props.page === 'Auth' && props.appState === 'auth' && (
+          <button className="header__button-auth" type="button" onClick={props.toApp}>
+            Поиск
+          </button>
+        )}
+        {props.appState === 'auth' && (
+          <button className="header__button-logout" type="button" onClick={props.logOut}>
+            Выйти
+          </button>
+        )}
       </header>
       <main className="main">
-        {props.appState === 'auth' ? (
+        {props.page === 'Search' ? (
           <Search searchData={props.searchData} setAppState={props.setAppState} />
-        ) : props.appState === 'non_auth' ? (
-          <Authorization setAppState={props.setAppState} />
-        ) : props.appState === 'updating' ? (
+        ) : props.page === 'Auth' ? (
+          <Authorization
+            setPage={props.setPage}
+            appState={props.appState}
+            setAppState={props.setAppState}
+            userRole={props.userRole}
+            setUserRole={props.setUserRole}
+          />
+        ) : props.page === 'Loading' ? (
           <Loading />
         ) : (
           <h2>Упс... что-то пошло не так...</h2>
@@ -64,6 +115,6 @@ const AppView = (props: ReturnType<typeof useApp>) => {
   );
 };
 
-export default function App(props: { initState: TAppState }) {
-  return <AppView {...useApp(props.initState)} />;
+export default function App(props: { initState: TAppState; userRole: TRole; initPage: TPage }) {
+  return <AppView {...useApp(props)} />;
 }

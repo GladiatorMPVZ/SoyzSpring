@@ -67,6 +67,8 @@
   }
 
   &__result {
+    display: grid;
+    grid-template-columns: 78% 22%;
     padding-left: 1rem;
     border-bottom: 0.1rem solid var(--color-main);
   }

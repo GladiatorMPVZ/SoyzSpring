@@ -103,6 +103,12 @@ const deleteVaporizerById = (id: number) => {
   return fetchJSON('DELETE', url);
 };
 
+const getBoxesByDeviceName = (deviceTitle: string) => {
+  const url = baseUrl + `boxes?deviceTitle=${deviceTitle}`;
+
+  return fetchJSON('GET', url);
+};
+
 export default {
   register,
   authorize,
@@ -116,4 +122,5 @@ export default {
   getVaporizersByDeviceName,
   addVaporizer,
   deleteVaporizerById,
+  getBoxesByDeviceName,
 };

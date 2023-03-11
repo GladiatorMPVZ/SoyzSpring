@@ -2,7 +2,7 @@ import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'reac
 import cn from 'classnames';
 
 import api from '../../api';
-import utils, { TBestMatches } from '../../Utils';
+import utils, { TBestMatch } from '../../Utils';
 import { TSetAppState } from '../../App';
 import Device from '../../entities/Device';
 import Vaporizer from '../../entities/Vaporizer';
@@ -15,8 +15,8 @@ export type TSearchData = {
 
 const useSearch = (props: Parameters<typeof Search>[0]) => {
   const [searchInput, setSearchInput] = useState('');
-  const [searchResult, setSearchResult] = useState([] as Device[]);
-  const [bestMatches, setBestMatches] = useState([] as TBestMatches[]);
+  const [searchResult, setSearchResult] = useState<Device[] | Array<{ title: string; boxNumber: number }>>([]);
+  const [bestMatches, setBestMatches] = useState<TBestMatch[]>([]);
   const [isShowOptions, setShowOptions] = useState(false);
   const optionsRef = useRef({} as HTMLUListElement);
 
@@ -35,12 +35,17 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
     let data: unknown;
 
     try {
-      if (type === 'device') data = await api.getVaporizersByDeviceName(title);
+      if (type === 'devices') data = await api.getBoxesByDeviceName(title);
       else data = await api.getDevicesByVaporizerName(title);
 
       setSearchInput(title);
       setShowOptions(false);
-      setSearchResult(Device.checkArray(data, false));
+      if (!(data instanceof Array && data.length)) {
+        setSearchResult([]);
+        return;
+      }
+      if (type !== 'devices') return setSearchResult(Device.checkArray(data));
+      setSearchResult(data as Array<{ title: string; boxNumber: number }>);
     } catch (error) {
       console.error(error);
       props.setAppState('error');
@@ -81,7 +86,8 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
       <ul className="search__results">
         {props.searchResult.map((c, i) => (
           <li className="search__result" key={i}>
-            {c.deviceTitle}
+            <span>{c.title}</span>
+            <span>Коробка № {c.boxNumber}</span>
           </li>
         ))}
       </ul>

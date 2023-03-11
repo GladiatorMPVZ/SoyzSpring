@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 
 import api from '../../api';
-import { TSetAppState } from '../../App';
+import utils from '../../Utils';
+import { TAppState, TPage, TRole, TSetAppState } from '../../App';
 import './Authorization.scss';
 
 type Token = {
@@ -16,8 +17,8 @@ const checkToken = (data: unknown) => {
   throw new Error(`No token, received data: ${data}`);
 };
 
-const useAuthorization = (props: { setAppState: TSetAppState }) => {
-  const [isSignIn, setSignIn] = useState(true);
+const useAuthorization = (props: Parameters<typeof Authorization>[0]) => {
+  const [isSignIn, setSignIn] = useState(props.appState !== 'auth');
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState('');
   const userNameRef = useRef(null);
@@ -29,11 +30,13 @@ const useAuthorization = (props: { setAppState: TSetAppState }) => {
     const password = (passwordRef.current as unknown as HTMLInputElement).value;
 
     try {
-      if (isSignIn) {
+      if (props.appState !== 'auth') {
         const data = await api.authorize({ username, password });
         const token = checkToken(data).token;
         localStorage.setItem('token', token);
-        props.setAppState('updating');
+        props.setPage('Search');
+        props.setUserRole(utils.getRole(token));
+        props.setAppState('auth');
       } else {
         const confirmPassword = (confirmPasswordRef.current as unknown as HTMLInputElement).value;
         await api.register({ username, password, confirmPassword });
@@ -52,45 +55,70 @@ const useAuthorization = (props: { setAppState: TSetAppState }) => {
     }
   };
 
-  return { isSignIn, setSignIn, userNameRef, passwordRef, confirmPasswordRef, action, isError, message };
+  const toSignIn = () => setSignIn(true);
+  const toSignUp = () => setSignIn(false);
+
+  return {
+    isSignIn,
+    userNameRef,
+    passwordRef,
+    confirmPasswordRef,
+    action,
+    isError,
+    message,
+    toSignIn,
+    toSignUp,
+    userRole: props.userRole,
+    appState: props.appState,
+  };
 };
 
 const AuthorizationView = (props: ReturnType<typeof useAuthorization>) => {
   return (
     <form className="auth__form">
-      <button
-        className={cn('auth__button_set-signin', { auth__button_active: props.isSignIn })}
-        type="button"
-        onClick={() => props.setSignIn(true)}
-      >
-        Вход
-      </button>
-      <button
-        className={cn('auth__button_set-signup', { auth__button_active: !props.isSignIn })}
-        type="button"
-        onClick={() => props.setSignIn(false)}
-      >
-        Регистрация
-      </button>
-      <h2 className="auth__h2">{props.isSignIn ? 'Вход' : 'Регистрация'}</h2>
+      {props.appState === 'error' && (
+        <>
+          <button
+            className={cn('auth__button_set-signin', { auth__button_active: props.isSignIn })}
+            type="button"
+            onClick={props.toSignIn}
+          >
+            Вход
+          </button>
+          <button
+            className={cn('auth__button_set-signup', { auth__button_active: !props.isSignIn })}
+            type="button"
+            onClick={props.toSignUp}
+          >
+            Регистрация
+          </button>
+        </>
+      )}
+      <h2 className="auth__h2">{props.appState !== 'auth' ? 'Вход' : 'Регистрация'}</h2>
       <span className={cn('auth__msg', { auth__msg_error: props.isError })}>{props.message}</span>
       <input className="auth__username" ref={props.userNameRef} type="text" placeholder="Логин" />
-      <input className="auth__password" ref={props.passwordRef} type="text" placeholder="Пароль" />
-      {!props.isSignIn && (
+      <input className="auth__password" ref={props.passwordRef} type="password" placeholder="Пароль" />
+      {props.appState === 'auth' && (
         <input
           className="auth__confirm-password"
           ref={props.confirmPasswordRef}
-          type="text"
+          type="password"
           placeholder="Подтверждение пароля"
         />
       )}
       <button className="auth__button_action" type="button" onClick={() => props.action()}>
-        {props.isSignIn ? 'Войти' : 'Зарегистрироваться'}
+        {props.appState !== 'auth' ? 'Войти' : 'Зарегистрироваться'}
       </button>
     </form>
   );
 };
 
-export default function Authorization(props: { setAppState: TSetAppState }) {
+export default function Authorization(props: {
+  setPage: React.Dispatch<React.SetStateAction<TPage>>;
+  appState: TAppState;
+  setAppState: TSetAppState;
+  userRole: TRole;
+  setUserRole: React.Dispatch<React.SetStateAction<TRole>>;
+}) {
   return <AuthorizationView {...useAuthorization(props)} />;
 }

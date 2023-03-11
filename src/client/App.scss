@@ -11,6 +11,7 @@
 
 .header {
   grid-area: header;
+  position: relative;
   height: 9rem;
   background: var(--color-main);
   color: var(--color-font-light);
@@ -19,6 +20,12 @@
     margin: 1rem;
     font-size: 4rem;
     line-height: 1.5;
+  }
+
+  &__button-logout {
+    position: absolute;
+    top: 2.2rem;
+    right: 1rem;
   }
 }
 
