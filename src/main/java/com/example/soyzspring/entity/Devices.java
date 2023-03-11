@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,5 +24,8 @@ public class Devices {
             joinColumns = @JoinColumn(name = "device_id"),
             inverseJoinColumns = @JoinColumn(name = "vaporizer_id"))
     private Collection<Vaporizers> vaporizers;
+
+    @OneToMany(mappedBy = "devicesId", cascade = CascadeType.ALL)
+    private List<DevicesVaporizers> devicesVaporizersList;
 
 }

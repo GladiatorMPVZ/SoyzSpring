@@ -3,8 +3,10 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Converters.DeviceConverter;
 import com.example.soyzspring.Dto.DeviceDto;
-import com.example.soyzspring.ResultForms.SearchDevVapResult;
+import com.example.soyzspring.Dto.VaporizerDto;
+import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
+import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Service.DevicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,13 +42,25 @@ public class DevicesController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createNewDevice(@RequestBody DeviceDto deviceDto) {
+    public ResponseEntity<?> createNewDevice(@RequestBody DeviceDto deviceDto) {
+        if (deviceDto.getTitle().length() == 0) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Название устройства не может быть пустым полем"), HttpStatus.BAD_REQUEST);
+        }
+        if (devicesService.isExists(deviceDto.getTitle())) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такое устройство уже существует"), HttpStatus.BAD_REQUEST);
+        }
         devicesService.createNewDevice(deviceDto);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public void deleteDeviceById(@PathVariable Long id) {
         devicesService.deleteById(id);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateTitle(@RequestBody VaporizerDto vaporizerDto) {
+        devicesService.updateName(vaporizerDto);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 }

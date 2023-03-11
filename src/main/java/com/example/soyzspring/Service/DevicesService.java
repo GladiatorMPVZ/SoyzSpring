@@ -2,10 +2,13 @@ package com.example.soyzspring.Service;
 
 
 import com.example.soyzspring.Dto.DeviceDto;
+import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Repository.DevicesRepository;
 import com.example.soyzspring.entity.Devices;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +20,6 @@ import java.util.Optional;
 public class DevicesService {
 
     private final DevicesRepository devicesRepository;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<Devices> findAll() {
         return devicesRepository.findAll();
@@ -38,15 +40,22 @@ public class DevicesService {
     }
 
     public List<SearchDevVapResult> searchDeviceResults(String vaporizerTitle) {
-        return jdbcTemplate.query(
-                "SELECT devices.device_title FROM devices " +
-                        "INNER JOIN devices_vaporizers " +
-                        "ON devices.id = devices_vaporizers.device_id " +
-                        "INNER JOIN vaporizers " +
-                        "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
-                        "WHERE vaporizers.title = '" + vaporizerTitle + "'",
-                (rs, rowNum) -> new SearchDevVapResult(rs.getString("device_title"))
-        );
+        return devicesRepository.findByVaporizerTitle(vaporizerTitle);
+    }
+
+    public boolean isExists(String deviceTitle) {
+        return devicesRepository.findByTitle(deviceTitle).isPresent();
+    }
+
+    public ResponseEntity<?> updateName(VaporizerDto vaporizerDto) {
+        Optional<Devices> myModel = devicesRepository.findById(vaporizerDto.getId());
+        if (!myModel.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Devices devices = myModel.get();
+        devices.setTitle(vaporizerDto.getTitle());
+        devicesRepository.save(devices);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
 }

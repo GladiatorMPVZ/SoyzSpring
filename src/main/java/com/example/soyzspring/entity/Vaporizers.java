@@ -18,8 +18,8 @@ public class Vaporizers {
     @Column(name = "title")
     private String title;
 
-//    @Column(name = "cell")
-//    private Integer cell;
+    @OneToMany(mappedBy = "vaporizersIdForDV", cascade = CascadeType.ALL)
+    private List<DevicesVaporizers> devicesVaporizersList;
 
     @OneToMany(mappedBy = "vaporizersId", cascade = CascadeType.ALL)
     private List<Boxes> boxesList;

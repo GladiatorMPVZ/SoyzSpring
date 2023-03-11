@@ -1,11 +1,15 @@
 package com.example.soyzspring.Service;
 
 
+import com.example.soyzspring.Dto.DeviceDto;
 import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Repository.VaporizersRepository;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
+import com.example.soyzspring.entity.Devices;
 import com.example.soyzspring.entity.Vaporizers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +21,6 @@ import java.util.Optional;
 public class VaporizersService {
 
     private final VaporizersRepository vaporizersRepository;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<Vaporizers> findAll() {
         return vaporizersRepository.findAll();
@@ -37,15 +40,22 @@ public class VaporizersService {
         vaporizersRepository.save(vaporizer);
     }
 
-    public List<SearchDevVapResult> searchDeviceResults(String title) {
-        return jdbcTemplate.query(
-                "SELECT vaporizers.title FROM vaporizers " +
-                        "INNER JOIN devices_vaporizers " +
-                        "ON vaporizers.id = devices_vaporizers.vaporizer_id " +
-                        "INNER JOIN devices " +
-                        "ON devices.id = devices_vaporizers.device_id " +
-                        "WHERE devices.device_title = '" + title + "'",
-                (rs, rowNum) -> new SearchDevVapResult(rs.getString("title"))
-        );
+    public List<SearchDevVapResult> searchDeviceResults(String deviceTitle) {
+        return vaporizersRepository.findByDeviceTitle(deviceTitle);
+    }
+
+    public boolean isExists(String deviceTitle) {
+        return vaporizersRepository.findByTitle(deviceTitle).isPresent();
+    }
+
+    public ResponseEntity<?> updateName(DeviceDto deviceDto) {
+        Optional<Vaporizers> myModel = vaporizersRepository.findById(deviceDto.getId());
+        if (!myModel.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Vaporizers vaporizers = myModel.get();
+        vaporizers.setTitle(deviceDto.getTitle());
+        vaporizersRepository.save(vaporizers);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 }
