@@ -2,6 +2,7 @@ package com.example.soyzspring.Controllers;
 
 
 import com.example.soyzspring.Converters.VaporizerConverter;
+import com.example.soyzspring.Dto.DeviceDto;
 import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Dto.VaporizerDto;
@@ -55,6 +56,13 @@ public class VaporizersController {
     public void deleteVaporizerById(@PathVariable Long id) {
         vaporizersService.deleteById(id);
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateTitle(@RequestBody DeviceDto deviceDto) {
+        vaporizersService.updateName(deviceDto);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
+
 
 
 }

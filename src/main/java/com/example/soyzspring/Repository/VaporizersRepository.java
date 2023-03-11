@@ -21,4 +21,5 @@ public interface VaporizersRepository extends JpaRepository<Vaporizers, Long> {
     List<SearchDevVapResult> findByDeviceTitle(@Param("deviceTitle") String deviceTitle);
 
     Optional<Vaporizers> findByTitle(String title);
+    Optional<Vaporizers> findById(Long vaporizerId);
 }

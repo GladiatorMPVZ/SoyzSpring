@@ -3,6 +3,7 @@ package com.example.soyzspring.Controllers;
 
 import com.example.soyzspring.Converters.DeviceConverter;
 import com.example.soyzspring.Dto.DeviceDto;
+import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
@@ -55,5 +56,11 @@ public class DevicesController {
     @DeleteMapping("/{id}")
     public void deleteDeviceById(@PathVariable Long id) {
         devicesService.deleteById(id);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateTitle(@RequestBody VaporizerDto vaporizerDto) {
+        devicesService.updateName(vaporizerDto);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 }
