@@ -34,7 +34,7 @@
     box-sizing: border-box;
     width: 100%;
     margin: 0;
-    padding: 0.5rem 0 0;
+    padding: 0.5rem 0 0.5rem;
     font-size: 1.8rem;
     background: white;
     list-style: none;
@@ -54,6 +54,13 @@
 
     &:hover {
       background: var(--color-alt);
+    }
+
+    &__rating,
+    &__type {
+      color: var(--color-font-ghost);
+      font-weight: 300;
+      font-size: 1.7rem;
     }
   }
 

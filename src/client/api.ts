@@ -55,8 +55,8 @@ const getDeviceById = (id: number) => {
   return fetchJSON('GET', url);
 };
 
-const getDevicesByVaporizerName = (vaporizerTitle: string) => {
-  const url = baseUrl + `devices/filtered?vaporizerTitle=${vaporizerTitle}`;
+const getDevicesByVaporizerId = (id: string) => {
+  const url = baseUrl + 'devices/filtered?vaporizerId=' + id;
 
   return fetchJSON('GET', url);
 };
@@ -85,8 +85,8 @@ const getVaporizerById = (id: number) => {
   return fetchJSON('GET', url);
 };
 
-const getVaporizersByDeviceName = (deviceTitle: string) => {
-  const url = baseUrl + `vaporizers/filtered?deviceTitle=${deviceTitle}`;
+const getVaporizersByDeviceId = (id: string) => {
+  const url = baseUrl + 'vaporizers?deviceId=' + id;
 
   return fetchJSON('GET', url);
 };
@@ -103,8 +103,8 @@ const deleteVaporizerById = (id: number) => {
   return fetchJSON('DELETE', url);
 };
 
-const getBoxesByDeviceName = (deviceTitle: string) => {
-  const url = baseUrl + `boxes?deviceTitle=${deviceTitle}`;
+const getBoxesByDeviceId = (id: string) => {
+  const url = baseUrl + 'boxes?deviceId=' + id;
 
   return fetchJSON('GET', url);
 };
@@ -114,13 +114,13 @@ export default {
   authorize,
   getDevices,
   getDeviceById,
-  getDevicesByVaporizerName,
+  getDevicesByVaporizerId,
   addDevice,
   deleteDeviceById,
   getVaporizers,
   getVaporizerById,
-  getVaporizersByDeviceName,
+  getVaporizersByDeviceId,
   addVaporizer,
   deleteVaporizerById,
-  getBoxesByDeviceName,
+  getBoxesByDeviceId,
 };

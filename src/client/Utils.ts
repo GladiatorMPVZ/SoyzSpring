@@ -4,16 +4,17 @@ import { TRole } from './App';
 import { TSearchData } from './components/Search/Search';
 
 export type TBestMatch = {
+  id: number;
   title: string;
   rating: number;
   type: string;
 };
 
 const findBestMatches = (sample: string, searchData: TSearchData, size = 5) => {
-  const bestMatches = new Array<TBestMatch>(size).fill({ title: '', rating: 0, type: '' });
+  const bestMatches = new Array<TBestMatch>(size).fill({ id: 0, title: '', rating: 0, type: '' });
   sample = sample.toLowerCase();
 
-  for (const [key, entities] of Object.entries(searchData))
+  for (const [type, entities] of Object.entries(searchData))
     for (const entity of entities) {
       const title = entity.title;
       const longer = Math.max(sample.length, title.length);
@@ -21,7 +22,7 @@ const findBestMatches = (sample: string, searchData: TSearchData, size = 5) => {
       let index: number;
       index = bestMatches.findIndex((match) => match.rating === 0);
       if (index === -1) index = bestMatches.findIndex((match) => match.rating < rating);
-      if (index !== -1) bestMatches.splice(index, 1, { title, rating, type: key });
+      if (index !== -1) bestMatches.splice(index, 1, { id: entity.id, title, rating, type });
     }
 
   return bestMatches.filter((match) => match.rating !== 0).sort((a, b) => b.rating - a.rating);

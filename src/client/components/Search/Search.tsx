@@ -33,11 +33,12 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
     const option = (event.target as HTMLElement).closest('.search__option') as HTMLElement;
     const type = option.dataset.type;
     const title = option.dataset.title as string;
+    const id = option.dataset.id as string;
     let data: unknown;
 
     try {
-      if (type === 'devices') data = await api.getBoxesByDeviceName(title);
-      else data = await api.getDevicesByVaporizerName(title);
+      if (type === 'devices') data = await api.getBoxesByDeviceId(id);
+      else data = await api.getDevicesByVaporizerId(id);
 
       setSearchInput(title);
       setShowOptions(false);
@@ -61,15 +62,21 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
     <div className="search">
       <h2 className="search__title">Поиск подходящих друг к другу устройств</h2>
       <div className="search__bar">
-        <input className="search__input" type="text" value={props.searchInput} onInput={props.updateOptions} />
+        <input className="search__input" type="search" value={props.searchInput} onInput={props.updateOptions} />
         <ul className={cn('search__options', { search__options_show: props.isShowOptions })} ref={props.optionsRef}>
           {props.bestMatches.map(
-            (c, i) =>
-              !!c.rating && (
-                <li className="search__option" key={i} data-type={`${c.type}`} data-title={`${c.title}`}>
-                  <span>{c.title}</span>
-                  <span>{`${(c.rating * 100).toFixed(2)}%`}</span>
-                  <span>{c.type === 'devices' ? 'Девайс' : 'Испаритель'}</span>
+            (match, i) =>
+              !!match.rating && (
+                <li
+                  className="search__option"
+                  key={i}
+                  data-id={`${match.id}`}
+                  data-title={match.title}
+                  data-type={match.type}
+                >
+                  <span>{match.title}</span>
+                  <span className="search__option__rating">{`${(match.rating * 100).toFixed(2)}%`}</span>
+                  <span className="search__option__type">{match.type === 'devices' ? 'Девайс' : 'Испаритель'}</span>
                 </li>
               ),
           )}
