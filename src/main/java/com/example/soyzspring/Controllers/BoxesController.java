@@ -35,4 +35,9 @@ public class BoxesController {
         boxesService.saveNewBox(boxDto, principal);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/all")
+    public List<BoxDto> getAllBoxes(Principal principal) {
+        return boxesService.getAllByUserId(principal);
+    }
 }

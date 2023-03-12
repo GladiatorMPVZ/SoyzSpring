@@ -2,6 +2,7 @@ package com.example.soyzspring.Repository;
 
 import com.example.soyzspring.ResultForms.SearchBoxNumberResult;
 import com.example.soyzspring.entity.Boxes;
+import com.example.soyzspring.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,6 @@ public interface BoxesRepository extends JpaRepository<Boxes, Long> {
             "INNER JOIN DevicesVaporizers dv ON v.id = dv.vaporizersIdForDV.id " +
             "WHERE dv.devicesId.id = :deviceId AND b.userId.id = :userId")
     List<SearchBoxNumberResult> findbyDevicesIdAndShopId(@Param("deviceId") Long deviceId, @Param("userId") Long userId);
+
+    List<Boxes> findByUserId(User userId);
 }
