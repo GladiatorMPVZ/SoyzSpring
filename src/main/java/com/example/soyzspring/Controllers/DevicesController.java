@@ -25,8 +25,8 @@ public class DevicesController {
     private final DeviceConverter deviceConverter;
 
     @GetMapping("/filtered")
-    public ResponseEntity<List<SearchDevVapResult>> getSuitableDevices(@RequestParam String vaporizerTitle) {
-        List<SearchDevVapResult> resultList = devicesService.searchDeviceResults(vaporizerTitle);
+    public ResponseEntity<List<SearchDevVapResult>> getSuitableDevices(@RequestParam Long vaporizerId) {
+        List<SearchDevVapResult> resultList = devicesService.searchDeviceResults(vaporizerId);
         return ResponseEntity.ok(resultList);
     }
 

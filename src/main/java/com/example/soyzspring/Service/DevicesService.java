@@ -39,8 +39,8 @@ public class DevicesService {
         devicesRepository.save(device);
     }
 
-    public List<SearchDevVapResult> searchDeviceResults(String vaporizerTitle) {
-        return devicesRepository.findByVaporizerTitle(vaporizerTitle);
+    public List<SearchDevVapResult> searchDeviceResults(Long vaporizerId) {
+        return devicesRepository.findByVaporizersIdForDv(vaporizerId);
     }
 
     public boolean isExists(String deviceTitle) {
