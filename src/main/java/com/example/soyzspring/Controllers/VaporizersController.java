@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,15 +25,13 @@ public class VaporizersController {
     private final VaporizersService vaporizersService;
     private final VaporizerConverter vaporizerConverter;
 
-    @GetMapping("/filtered")
-    public ResponseEntity<List<SearchDevVapResult>> getSuitableVaporizers(@RequestParam String deviceTitle) {
-        List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(deviceTitle);
-        return ResponseEntity.ok(resultList);
-    }
-
     @GetMapping
-    public List<VaporizerDto> getAllVaporizers() {
-        return vaporizersService.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList());
+    public ResponseEntity<?> getSuitableVaporizers(@RequestParam(required = false) Map<String, String> requiredParams) {
+        if (Objects.isNull(requiredParams.get("deviceTitle"))) {
+            return ResponseEntity.ok(vaporizersService.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList()));
+        }
+        List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(requiredParams.get("deviceTitle"));
+        return ResponseEntity.ok(resultList);
     }
 
     @GetMapping("/{id}")
