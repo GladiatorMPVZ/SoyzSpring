@@ -21,9 +21,9 @@ public class BoxesController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<SearchBoxNumberResult>> getNumber(@RequestParam String deviceTitle, Principal principal) {
+    public ResponseEntity<List<SearchBoxNumberResult>> getNumber(@RequestParam Long deviceId, Principal principal) {
         Long userId = userService.findByUsername(principal.getName()).get().getId();
-        List<SearchBoxNumberResult> resultList = boxesService.getBoxNumber(deviceTitle, userId);
+        List<SearchBoxNumberResult> resultList = boxesService.getBoxNumber(deviceId, userId);
         return ResponseEntity.ok(resultList);
     }
 

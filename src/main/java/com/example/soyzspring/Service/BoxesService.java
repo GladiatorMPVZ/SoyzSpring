@@ -30,8 +30,8 @@ public class BoxesService {
         return boxesRepository.findAll();
     }
 
-    public List<SearchBoxNumberResult> getBoxNumber(String title, Long userId) {
-        return boxesRepository.findbyDeviceTitleAndShopId(title, userId);
+    public List<SearchBoxNumberResult> getBoxNumber(Long deviceId, Long userId) {
+        return boxesRepository.findbyDevicesIdAndShopId(deviceId, userId);
     }
 
     public void saveNewBox(BoxDto boxDto, Principal principal) {

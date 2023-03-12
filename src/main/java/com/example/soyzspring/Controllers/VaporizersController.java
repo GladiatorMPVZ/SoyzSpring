@@ -27,10 +27,10 @@ public class VaporizersController {
 
     @GetMapping
     public ResponseEntity<?> getSuitableVaporizers(@RequestParam(required = false) Map<String, String> requiredParams) {
-        if (Objects.isNull(requiredParams.get("deviceTitle"))) {
+        if (Objects.isNull(requiredParams.get("deviceId"))) {
             return ResponseEntity.ok(vaporizersService.findAll().stream().map(vaporizerConverter::entityToDto).collect(Collectors.toList()));
         }
-        List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(requiredParams.get("deviceTitle"));
+        List<SearchDevVapResult> resultList = vaporizersService.searchDeviceResults(Long.valueOf(requiredParams.get("deviceId")));
         return ResponseEntity.ok(resultList);
     }
 

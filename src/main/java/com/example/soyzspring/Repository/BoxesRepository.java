@@ -11,11 +11,10 @@ import java.util.List;
 
 @Repository
 public interface BoxesRepository extends JpaRepository<Boxes, Long> {
-    @Query("SELECT new com.example.soyzspring.ResultForms.SearchBoxNumberResult(b.number, v.title) " +
+    @Query("SELECT new com.example.soyzspring.ResultForms.SearchBoxNumberResult(dv.devicesId.id, b.number, v.title)" +
             "FROM Boxes b " +
             "INNER JOIN Vaporizers v ON b.vaporizersId.id = v.id " +
             "INNER JOIN DevicesVaporizers dv ON v.id = dv.vaporizersIdForDV.id " +
-            "INNER JOIN Devices d ON dv.devicesId.id = d.id " +
-            "WHERE d.title = :deviceTitle AND b.userId.id = :userId")
-    List<SearchBoxNumberResult> findbyDeviceTitleAndShopId(@Param("deviceTitle") String deviceTitle, @Param("userId") Long userId);
+            "WHERE dv.devicesId.id = :deviceId AND b.userId.id = :userId")
+    List<SearchBoxNumberResult> findbyDevicesIdAndShopId(@Param("deviceId") Long deviceId, @Param("userId") Long userId);
 }

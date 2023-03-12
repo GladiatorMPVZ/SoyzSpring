@@ -17,9 +17,8 @@ public interface DevicesRepository extends JpaRepository<Devices, Long> {
     @Query("SELECT new com.example.soyzspring.ResultForms.SearchDevVapResult(d.id, d.title) " +
             "FROM Devices d " +
             "INNER JOIN DevicesVaporizers dv ON d.id = dv.devicesId.id " +
-            "INNER JOIN Vaporizers v ON v.id = dv.vaporizersIdForDV.id " +
-            "WHERE v.title = :vaporizerTitle")
-    List<SearchDevVapResult> findByVaporizerTitle(@Param("vaporizerTitle") String vaporizerTitle);
+            "WHERE dv.vaporizersIdForDV.id = :vaporizerId")
+    List<SearchDevVapResult> findByVaporizersIdForDv(@Param("vaporizerId") Long vaporizerId);
 
     Optional<Devices> findByTitle(String title);
     Optional<Devices> findById(Long deviceId);

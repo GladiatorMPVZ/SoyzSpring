@@ -40,8 +40,8 @@ public class VaporizersService {
         vaporizersRepository.save(vaporizer);
     }
 
-    public List<SearchDevVapResult> searchDeviceResults(String deviceTitle) {
-        return vaporizersRepository.findByDeviceTitle(deviceTitle);
+    public List<SearchDevVapResult> searchDeviceResults(Long deviceId) {
+        return vaporizersRepository.findByDevicesId(deviceId);
     }
 
     public boolean isExists(String deviceTitle) {
