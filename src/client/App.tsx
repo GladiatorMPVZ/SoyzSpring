@@ -6,12 +6,12 @@ import Vaporizer from './entities/Vaporizer';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
 import Search, { TSearchData } from './components/Search/Search';
+import Edit from './components/Edit/Edit';
 import './App.scss';
 
 export type TAppState = 'auth' | 'non_auth' | 'error';
-export type TSetAppState = React.Dispatch<React.SetStateAction<TAppState>>;
 export type TRole = 'Admin' | 'User' | 'Guest';
-export type TPage = 'Auth' | 'Search' | 'Loading' | 'Error';
+export type TPage = 'Auth' | 'Search' | 'Edit' | 'Loading' | 'Error';
 
 const useApp = (props: Parameters<typeof App>[0]) => {
   const [page, setPage] = useState<TPage>(props.initPage);
@@ -36,6 +36,7 @@ const useApp = (props: Parameters<typeof App>[0]) => {
       } catch (error) {
         if (isIgnoreFetch) return;
         setAppState('error');
+        setPage('Error');
         console.error(error);
       }
     })();
@@ -105,6 +106,8 @@ const AppView = (props: ReturnType<typeof useApp>) => {
             userRole={props.userRole}
             setUserRole={props.setUserRole}
           />
+        ) : props.page === 'Edit' ? (
+          <Edit searchData={props.searchData} setAppState={props.setAppState} />
         ) : props.page === 'Loading' ? (
           <Loading />
         ) : (

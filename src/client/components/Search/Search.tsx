@@ -2,10 +2,11 @@ import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'reac
 import cn from 'classnames';
 
 import api from '../../api';
-import utils, { TBestMatch } from '../../Utils';
-import { TSetAppState } from '../../App';
+import utils, { TBestMatch, TSetState } from '../../Utils';
+import { TAppState } from '../../App';
 import Device from '../../entities/Device';
 import Vaporizer from '../../entities/Vaporizer';
+import SearchResult from '../../entities/SearchResult';
 import './Search.scss';
 
 export type TSearchData = {
@@ -15,7 +16,7 @@ export type TSearchData = {
 
 const useSearch = (props: Parameters<typeof Search>[0]) => {
   const [searchInput, setSearchInput] = useState('');
-  const [searchResult, setSearchResult] = useState<Device[] | Array<{ title: string; boxNumber: number }>>([]);
+  const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
   const [bestMatches, setBestMatches] = useState<TBestMatch[]>([]);
   const [isShowOptions, setShowOptions] = useState(false);
   const optionsRef = useRef({} as HTMLUListElement);
@@ -40,12 +41,8 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
 
       setSearchInput(title);
       setShowOptions(false);
-      if (!(data instanceof Array && data.length)) {
-        setSearchResult([]);
-        return;
-      }
-      if (type !== 'devices') return setSearchResult(Device.checkArray(data));
-      setSearchResult(data as Array<{ title: string; boxNumber: number }>);
+      if (!(data instanceof Array && data.length)) return setSearchResult([]);
+      setSearchResult(SearchResult.check(data));
     } catch (error) {
       console.error(error);
       props.setAppState('error');
@@ -64,12 +61,7 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
     <div className="search">
       <h2 className="search__title">Поиск подходящих друг к другу устройств</h2>
       <div className="search__bar">
-        <input
-          className="search__input"
-          type="text"
-          value={props.searchInput}
-          onInput={(event) => props.updateOptions(event)}
-        />
+        <input className="search__input" type="text" value={props.searchInput} onInput={props.updateOptions} />
         <ul className={cn('search__options', { search__options_show: props.isShowOptions })} ref={props.optionsRef}>
           {props.bestMatches.map(
             (c, i) =>
@@ -84,10 +76,10 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
         </ul>
       </div>
       <ul className="search__results">
-        {props.searchResult.map((c, i) => (
+        {props.searchResult.map((result, i) => (
           <li className="search__result" key={i}>
-            <span>{c.title}</span>
-            <span>Коробка № {c.boxNumber}</span>
+            <span>{result.title}</span>
+            {result.boxNumber && <span>Коробка № {result.boxNumber}</span>}
           </li>
         ))}
       </ul>
@@ -95,6 +87,6 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
   );
 };
 
-export default function Search(props: { searchData: TSearchData; setAppState: TSetAppState }) {
+export default function Search(props: { searchData: TSearchData; setAppState: TSetState<TAppState> }) {
   return <SearchView {...useSearch(props)} />;
 }

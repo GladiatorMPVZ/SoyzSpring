@@ -1,3 +1,4 @@
+import React from 'react';
 import { distance } from 'fastest-levenshtein';
 import { TRole } from './App';
 import { TSearchData } from './components/Search/Search';
@@ -36,6 +37,8 @@ const getRole = (token: string | null) => {
   }
   return role;
 };
+
+export type TSetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export default {
   findBestMatches,

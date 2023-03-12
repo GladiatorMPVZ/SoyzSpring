@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 
 import api from '../../api';
-import utils from '../../Utils';
-import { TAppState, TPage, TRole, TSetAppState } from '../../App';
+import utils, { TSetState } from '../../Utils';
+import { TAppState, TPage, TRole } from '../../App';
 import './Authorization.scss';
 
 type Token = {
@@ -106,7 +106,7 @@ const AuthorizationView = (props: ReturnType<typeof useAuthorization>) => {
           placeholder="Подтверждение пароля"
         />
       )}
-      <button className="auth__button_action" type="button" onClick={() => props.action()}>
+      <button className="auth__button_action" type="button" onClick={props.action}>
         {props.appState !== 'auth' ? 'Войти' : 'Зарегистрироваться'}
       </button>
     </form>
@@ -114,11 +114,11 @@ const AuthorizationView = (props: ReturnType<typeof useAuthorization>) => {
 };
 
 export default function Authorization(props: {
-  setPage: React.Dispatch<React.SetStateAction<TPage>>;
+  setPage: TSetState<TPage>;
   appState: TAppState;
-  setAppState: TSetAppState;
+  setAppState: TSetState<TAppState>;
   userRole: TRole;
-  setUserRole: React.Dispatch<React.SetStateAction<TRole>>;
+  setUserRole: TSetState<TRole>;
 }) {
   return <AuthorizationView {...useAuthorization(props)} />;
 }
