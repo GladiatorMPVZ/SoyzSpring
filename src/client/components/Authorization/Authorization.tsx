@@ -29,6 +29,11 @@ const useAuthorization = (props: Parameters<typeof Authorization>[0]) => {
     const username = (userNameRef.current as unknown as HTMLInputElement).value;
     const password = (passwordRef.current as unknown as HTMLInputElement).value;
 
+    if (!username || !password) {
+      setMessage('Заполните поля');
+      return setIsError(true);
+    }
+
     try {
       if (props.appState !== 'auth') {
         const data = await api.authorize({ username, password });

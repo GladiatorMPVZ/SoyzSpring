@@ -26,8 +26,8 @@
 .main {
   grid-area: main;
   display: grid;
-  justify-content: center;
+  justify-self: center;
   place-items: center;
-  width: 100%;
+  width: calc(25rem + 20vw);
   max-width: 140rem;
 }

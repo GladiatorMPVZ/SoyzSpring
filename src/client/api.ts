@@ -67,7 +67,7 @@ const addDevice = (dto: AddEntityDTO) => {
   return fetchJSON('POST', url, dto);
 };
 
-const deleteDeviceById = (id: number) => {
+const deleteDevice = (id: number) => {
   const url = baseUrl + `devices/${id}`;
 
   return fetchJSON('DELETE', url);
@@ -97,7 +97,7 @@ const addVaporizer = (dto: AddEntityDTO) => {
   return fetchJSON('POST', url, dto);
 };
 
-const deleteVaporizerById = (id: number) => {
+const deleteVaporizer = (id: number) => {
   const url = baseUrl + `vaporizers/${id}`;
 
   return fetchJSON('DELETE', url);
@@ -116,11 +116,11 @@ export default {
   getDeviceById,
   getDevicesByVaporizerId,
   addDevice,
-  deleteDeviceById,
+  deleteDevice,
   getVaporizers,
   getVaporizerById,
   getVaporizersByDeviceId,
   addVaporizer,
-  deleteVaporizerById,
+  deleteVaporizer,
   getBoxesByDeviceId,
 };

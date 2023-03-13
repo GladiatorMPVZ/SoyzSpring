@@ -44,7 +44,7 @@ const useApp = (props: Parameters<typeof App>[0]) => {
     return () => {
       isIgnoreFetch = true;
     };
-  });
+  }, [page]);
 
   const logOut = useCallback(() => {
     localStorage.removeItem('token');

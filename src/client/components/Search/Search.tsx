@@ -60,13 +60,13 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
     optionsRef.current.addEventListener('click', search);
   });
 
-  return { searchInput, updateOptions, bestMatches, optionsRef, isShowOptions, searchResult };
+  return { searchInput, updateOptions, bestMatches, optionsRef, isShowOptions, searchResult, isEdit: props.isEdit };
 };
 
 const SearchView = (props: ReturnType<typeof useSearch>) => {
   return (
     <div className="search">
-      <h2 className="search__title">Поиск подходящих друг к другу устройств</h2>
+      {!props.isEdit && <h2 className="search__title">Поиск подходящих друг к другу устройств</h2>}
       <div className="search__bar">
         <input className="search__input" type="search" value={props.searchInput} onInput={props.updateOptions} />
         <ul className={cn('search__options', { search__options_show: props.isShowOptions })} ref={props.optionsRef}>
@@ -100,6 +100,10 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
   );
 };
 
-export default function Search(props: { searchData: TSearchData; setAppState: TSetState<TAppState> }) {
+export default function Search(props: {
+  searchData: TSearchData;
+  setAppState: TSetState<TAppState>;
+  isEdit?: boolean;
+}) {
   return <SearchView {...useSearch(props)} />;
 }
