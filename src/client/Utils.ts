@@ -10,22 +10,22 @@ export type TBestMatch = {
   type: string;
 };
 
-const findBestMatches = (sample: string, searchData: TSearchData, size = 5) => {
+const findBestMatches = (sample: string, searchData: Partial<TSearchData>, size = 5) => {
   const bestMatches = new Array<TBestMatch>(size).fill({ id: 0, title: '', rating: 0, type: '' });
   sample = sample.toLowerCase();
 
-  for (const [type, entities] of Object.entries(searchData))
-    for (const entity of entities) {
-      const title = entity.title;
+  for (const [type, entity] of Object.entries(searchData))
+    for (const instance of entity) {
+      const title = instance.title;
       const longer = Math.max(sample.length, title.length);
       const rating = (longer - distance(sample, title.toLowerCase())) / longer;
       let index: number;
-      index = bestMatches.findIndex((match) => match.rating === 0);
-      if (index === -1) index = bestMatches.findIndex((match) => match.rating < rating);
-      if (index !== -1) bestMatches.splice(index, 1, { id: entity.id, title, rating, type });
+      index = bestMatches.findIndex((item) => item.rating === 0);
+      if (index === -1) index = bestMatches.findIndex((item) => item.rating < rating);
+      if (index !== -1) bestMatches.splice(index, 1, { id: instance.id, title, rating, type });
     }
 
-  return bestMatches.filter((match) => match.rating !== 0).sort((a, b) => b.rating - a.rating);
+  return bestMatches.filter((item) => item.rating !== 0).sort((a, b) => b.rating - a.rating);
 };
 
 type TTokenData = { sub: string; roles: TRole[] };

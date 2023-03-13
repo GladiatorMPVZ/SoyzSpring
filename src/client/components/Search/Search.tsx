@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import api from '../../api';
@@ -23,9 +23,15 @@ const useSearch = (props: Parameters<typeof Search>[0]) => {
 
   const updateOptions = (event: FormEvent<HTMLInputElement>) => {
     const input = (event.target as HTMLInputElement).value;
+    setSearchInput(input);
+
+    if (!input) {
+      setShowOptions(false);
+      return setSearchResult([]);
+    }
+
     const bestMatches = utils.findBestMatches(input, props.searchData);
     setBestMatches(bestMatches);
-    setSearchInput(input);
     setShowOptions(!!bestMatches.length);
   };
 
@@ -65,28 +71,28 @@ const SearchView = (props: ReturnType<typeof useSearch>) => {
         <input className="search__input" type="search" value={props.searchInput} onInput={props.updateOptions} />
         <ul className={cn('search__options', { search__options_show: props.isShowOptions })} ref={props.optionsRef}>
           {props.bestMatches.map(
-            (match, i) =>
-              !!match.rating && (
+            (item, i) =>
+              !!item.rating && (
                 <li
                   className="search__option"
                   key={i}
-                  data-id={`${match.id}`}
-                  data-title={match.title}
-                  data-type={match.type}
+                  data-id={`${item.id}`}
+                  data-title={item.title}
+                  data-type={item.type}
                 >
-                  <span>{match.title}</span>
-                  <span className="search__option__rating">{`${(match.rating * 100).toFixed(2)}%`}</span>
-                  <span className="search__option__type">{match.type === 'devices' ? 'Девайс' : 'Испаритель'}</span>
+                  <span>{item.title}</span>
+                  <span className="search__option__rating">{`${(item.rating * 100).toFixed(2)}%`}</span>
+                  <span className="search__option__type">{item.type === 'devices' ? 'Девайс' : 'Испаритель'}</span>
                 </li>
               ),
           )}
         </ul>
       </div>
       <ul className="search__results">
-        {props.searchResult.map((result, i) => (
+        {props.searchResult.map((item, i) => (
           <li className="search__result" key={i}>
-            <span>{result.title}</span>
-            {result.boxNumber && <span>Коробка № {result.boxNumber}</span>}
+            <span>{item.title}</span>
+            {item.boxNumber && <span>Коробка № {item.boxNumber}</span>}
           </li>
         ))}
       </ul>

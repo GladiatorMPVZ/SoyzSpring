@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import api from './api';
 import Device from './entities/Device';
 import Vaporizer from './entities/Vaporizer';
+import Nav from './components/Nav/Nav';
 import Loading from './components/Loading/Loading';
 import Authorization from './components/Authorization/Authorization';
 import Search, { TSearchData } from './components/Search/Search';
@@ -45,20 +46,12 @@ const useApp = (props: Parameters<typeof App>[0]) => {
     };
   });
 
-  const logOut = () => {
+  const logOut = useCallback(() => {
     localStorage.removeItem('token');
     setAppState('non_auth');
     setPage('Auth');
     setUserRole('Guest');
-  };
-
-  const toAuth = () => {
-    setPage('Auth');
-  };
-
-  const toApp = () => {
-    setPage('Search');
-  };
+  }, []);
 
   return {
     appState,
@@ -67,8 +60,6 @@ const useApp = (props: Parameters<typeof App>[0]) => {
     logOut,
     userRole,
     setUserRole,
-    toAuth,
-    toApp,
     page,
     setPage,
   };
@@ -79,21 +70,7 @@ const AppView = (props: ReturnType<typeof useApp>) => {
     <>
       <header className="header">
         <h1 className="header__h1">SoyzVape</h1>
-        {props.userRole === 'Admin' && props.page !== 'Auth' && (
-          <button className="header__button-auth" type="button" onClick={props.toAuth}>
-            Регистрация
-          </button>
-        )}
-        {props.userRole === 'Admin' && props.page === 'Auth' && props.appState === 'auth' && (
-          <button className="header__button-auth" type="button" onClick={props.toApp}>
-            Поиск
-          </button>
-        )}
-        {props.appState === 'auth' && (
-          <button className="header__button-logout" type="button" onClick={props.logOut}>
-            Выйти
-          </button>
-        )}
+        <Nav setPage={props.setPage} appState={props.appState} userRole={props.userRole} logOut={props.logOut} />
       </header>
       <main className="main">
         {props.page === 'Search' ? (

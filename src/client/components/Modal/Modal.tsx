@@ -1,5 +1,7 @@
-import React, { ReactElement, KeyboardEvent, MouseEvent } from 'react';
+import { ReactElement, KeyboardEvent, MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
+
+import './Modal.scss';
 
 const useModal = (props: Parameters<typeof Modal>[0]) => {
   const container = document.getElementById('overlay') as HTMLElement;
