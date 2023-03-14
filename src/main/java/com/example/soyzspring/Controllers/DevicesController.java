@@ -52,8 +52,7 @@ public class DevicesController {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такое устройство уже существует"), HttpStatus.BAD_REQUEST);
         }
         Devices devices = devicesService.createNewDevice(deviceDto);
-        deviceDto.setId(devices.getId());
-        deviceDto.setTitle(devices.getTitle());
+        deviceDto = deviceConverter.entityToDto(devices);
         return new ResponseEntity(deviceDto, HttpStatus.CREATED);
     }
 

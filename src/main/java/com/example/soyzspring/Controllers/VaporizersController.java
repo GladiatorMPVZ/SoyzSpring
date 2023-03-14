@@ -50,8 +50,7 @@ public class VaporizersController {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такой испаритель уже существует"), HttpStatus.BAD_REQUEST);
         }
         Vaporizers vaporizers = vaporizersService.createNewVaporizer(vaporizerDto);
-        vaporizerDto.setId(vaporizers.getId());
-        vaporizerDto.setTitle(vaporizerDto.getTitle());
+        vaporizerDto = vaporizerConverter.entityToDto(vaporizers);
         return new ResponseEntity(vaporizerDto, HttpStatus.CREATED);
     }
 
