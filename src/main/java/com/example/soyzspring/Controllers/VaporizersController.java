@@ -8,6 +8,7 @@ import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Dto.VaporizerDto;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.Service.VaporizersService;
+import com.example.soyzspring.entity.Vaporizers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,10 @@ public class VaporizersController {
         if (vaporizersService.isExists(vaporizerDto.getTitle())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такой испаритель уже существует"), HttpStatus.BAD_REQUEST);
         }
-        vaporizersService.createNewVaporizer(vaporizerDto);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        Vaporizers vaporizers = vaporizersService.createNewVaporizer(vaporizerDto);
+        vaporizerDto.setId(vaporizers.getId());
+        vaporizerDto.setTitle(vaporizerDto.getTitle());
+        return new ResponseEntity(vaporizerDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

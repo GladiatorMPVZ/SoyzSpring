@@ -33,10 +33,10 @@ public class DevicesService {
         return devicesRepository.findById(id);
     }
 
-    public void createNewDevice(DeviceDto deviceDto) {
+    public Devices createNewDevice(DeviceDto deviceDto) {
         Devices device = new Devices();
         device.setTitle(deviceDto.getTitle());
-        devicesRepository.save(device);
+        return devicesRepository.save(device);
     }
 
     public List<SearchDevVapResult> searchDeviceResults(Long vaporizerId) {

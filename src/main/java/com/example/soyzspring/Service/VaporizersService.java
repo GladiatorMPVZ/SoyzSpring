@@ -34,10 +34,10 @@ public class VaporizersService {
         return vaporizersRepository.findById(id);
     }
 
-    public void createNewVaporizer(VaporizerDto vaporizerDto) {
+    public Vaporizers createNewVaporizer(VaporizerDto vaporizerDto) {
         Vaporizers vaporizer = new Vaporizers();
         vaporizer.setTitle(vaporizerDto.getTitle());
-        vaporizersRepository.save(vaporizer);
+        return vaporizersRepository.save(vaporizer);
     }
 
     public List<SearchDevVapResult> searchDeviceResults(Long deviceId) {

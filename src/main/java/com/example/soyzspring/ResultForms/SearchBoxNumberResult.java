@@ -6,13 +6,13 @@ import lombok.Data;
 @Data
 public class SearchBoxNumberResult {
 
-    private Long deviceId;
     private Integer boxNumber;
+    private Long vaporId;
     private String title;
 
-    public SearchBoxNumberResult(Long deviceId, Integer boxNumber, String title) {
-        this.deviceId = deviceId;
+    public SearchBoxNumberResult(Integer boxNumber, Long vaporId, String title) {
         this.boxNumber = boxNumber;
+        this.vaporId = vaporId;
         this.title = title;
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface BoxesRepository extends JpaRepository<Boxes, Long> {
-    @Query("SELECT new com.example.soyzspring.ResultForms.SearchBoxNumberResult(dv.devicesId.id, b.number, v.title)" +
+    @Query("SELECT new com.example.soyzspring.ResultForms.SearchBoxNumberResult(b.number,v.id, v.title)" +
             "FROM Boxes b " +
             "INNER JOIN Vaporizers v ON b.vaporizersId.id = v.id " +
             "INNER JOIN DevicesVaporizers dv ON v.id = dv.vaporizersIdForDV.id " +

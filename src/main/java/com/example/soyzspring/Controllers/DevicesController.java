@@ -8,6 +8,7 @@ import com.example.soyzspring.Exceptions.AppError;
 import com.example.soyzspring.Exceptions.ResourceNotFoundException;
 import com.example.soyzspring.ResultForms.SearchDevVapResult;
 import com.example.soyzspring.Service.DevicesService;
+import com.example.soyzspring.entity.Devices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ public class DevicesController {
     }
 
     @PostMapping
+    @ResponseBody
     public ResponseEntity<?> createNewDevice(@RequestBody DeviceDto deviceDto) {
         if (deviceDto.getTitle().length() == 0) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Название устройства не может быть пустым полем"), HttpStatus.BAD_REQUEST);
@@ -49,8 +51,10 @@ public class DevicesController {
         if (devicesService.isExists(deviceDto.getTitle())) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Такое устройство уже существует"), HttpStatus.BAD_REQUEST);
         }
-        devicesService.createNewDevice(deviceDto);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        Devices devices = devicesService.createNewDevice(deviceDto);
+        deviceDto.setId(devices.getId());
+        deviceDto.setTitle(devices.getTitle());
+        return new ResponseEntity(deviceDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
